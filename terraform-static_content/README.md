@@ -48,4 +48,4 @@ aws_cloudfront_distribution_domain_name = "XXXXXXXXXXXXX.cloudfront.net"
 ```
 
 # ライセンス
-[Mozilla Public License v2.0](https://github.com/Lamaglama39/terraform-for-aws/terraform-static_content/main/LICENSE)
+[Mozilla Public License v2.0](https://github.com/Lamaglama39/terraform-for-aws/blob/main/LICENSE)
