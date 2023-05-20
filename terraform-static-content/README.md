@@ -1,4 +1,4 @@
-# terraform-static_content
+# terraform-static-content
 S3とCloudFrontを利用した、シンプルな静的コンテンツを配信します。
 <br>
 HTTPSでWebサイトを公開したい！でもドメイン名をとるほどのものではない...。
