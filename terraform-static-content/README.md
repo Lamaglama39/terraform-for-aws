@@ -49,3 +49,6 @@ aws_cloudfront_distribution_domain_name = "XXXXXXXXXXXXX.cloudfront.net"
 
 # ライセンス
 [Mozilla Public License v2.0](https://github.com/Lamaglama39/terraform-for-aws/blob/main/LICENSE)
+
+# 素材クレジット
+- <a target="_blank" href="https://icons8.com/icon/WncR8Bcg5nE9/terraform">Terraform</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
