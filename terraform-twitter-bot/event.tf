@@ -1,3 +1,4 @@
+# Eventbridgeルールの作成
 resource "aws_cloudwatch_event_rule" "event" {
   event_bus_name      = "default"
   is_enabled          = "true"

@@ -6,7 +6,7 @@ resource "aws_dynamodb_table" "dynamodb" {
 
   billing_mode = "PROVISIONED"
   hash_key     = "hash"
-  name         = "hash_string"
+  name         = "twitter-bot-table"
 
   point_in_time_recovery {
     enabled = "false"
@@ -19,8 +19,9 @@ resource "aws_dynamodb_table" "dynamodb" {
   write_capacity = "1"
 }
 
+# テーブルアイテムの設定
 locals {
-  json_data = file("./config.json")         
+  json_data = file("./conf/table.json")         
   config    = jsondecode(local.json_data)
 }
 

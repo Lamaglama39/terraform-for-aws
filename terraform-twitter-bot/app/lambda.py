@@ -7,27 +7,26 @@ from datetime import datetime, timedelta, timezone
 JST = timezone(timedelta(hours=+9), 'JST')
 
 def handler(event, context):
-    text = random_choice_text()
-    tweet(text)
+    contents = random_choice_text()
+    tweet(contents)
 
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
     }
 
-def tweet(text: str):
-    api_key = os.environ['api_key']
-    api_secret_key = os.environ['api_secret_key']
-    acces_token = os.environ['acces_token']
-    acces_token_secrete = os.environ['acces_token_secrete']
-    auth = tweepy.OAuthHandler(api_key, api_secret_key)
-    auth.set_access_token(acces_token, acces_token_secrete)
-    api = tweepy.API(auth)
-    api.update_status(text)
+def tweet(contents: str):
+    ck = os.environ['api_key']
+    cs = os.environ['api_secret_key']
+    at = os.environ['acces_token']
+    ats = os.environ['acces_token_secrete']
+    
+    client = tweepy.Client(consumer_key=ck, consumer_secret=cs, access_token=at, access_token_secret=ats)
+    client.create_tweet(text = contents)
 
 def random_choice_text() -> str:
     db = boto3.resource('dynamodb')
-    table = db.Table('yadon')
+    table = db.Table('twitter-bot-table')
     res = table.scan()
     items = res['Items']
     
