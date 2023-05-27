@@ -1,0 +1,35 @@
+{
+    "data1": {
+        "hash": {
+            "S": "data1"
+        },
+        "text": {
+            "S": "text1"
+        },
+        "weight": {
+            "N": "1"
+        }
+    },
+    "data2": {
+        "hash": {
+            "S": "data2"
+        },
+        "text": {
+            "S": "text2"
+        },
+        "weight": {
+            "N": "1"
+        }
+    },
+    "data3": {
+        "hash": {
+            "S": "data3"
+        },
+        "text": {
+            "S": "text3"
+        },
+        "weight": {
+            "N": "1"
+        }
+    }
+}

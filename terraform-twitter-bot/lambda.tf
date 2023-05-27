@@ -1,29 +1,38 @@
+# ライブラリのインストール
+resource "terraform_data" "main" {
+  provisioner "local-exec" {
+    command = "bash ./conf/install.sh"
+  }
+}
+
 data "archive_file" "function_source" {
+  depends_on = [ terraform_data.main ]
+
   type        = "zip"
   source_dir  = "app"
   output_path = "archive/my_lambda_function.zip"
 }
 
+# Lambda関数の作成
 resource "aws_lambda_function" "lambda" {
   architectures = ["x86_64"]
 
   ephemeral_storage {
     size = "512"
   }
-
   function_name                  = "twitter_bot"
   handler                        = "lambda.handler"
-  layers                         = ["arn:aws:lambda:ap-northeast-1:770693421928:layer:Klayers-python38-tweepy:1"]
   memory_size                    = "128"
   package_type                   = "Zip"
   reserved_concurrent_executions = "-1"
   role                           = aws_iam_role.iam_role.arn
-  runtime                        = "python3.8"
+  runtime                        = "python3.9"
   filename         = data.archive_file.function_source.output_path
   source_code_hash = data.archive_file.function_source.output_base64sha256
 
-  timeout = "3"
+  timeout = "5"
 
+  # Twitterクレデンシャル情報の設定
   environment {
     variables = {
       api_key = "${var.api_key}"
@@ -37,7 +46,7 @@ resource "aws_lambda_function" "lambda" {
   }
 }
 
-
+# Lambda関数の実行権限を設定
 resource "aws_lambda_permission" "allow_evemts" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
