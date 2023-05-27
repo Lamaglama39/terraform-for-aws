@@ -1,0 +1,13 @@
+{
+    "dynamodb": {
+        "hash": {
+            "S": "hash_string"
+        },
+        "text": {
+            "S": "text"
+        },
+        "weight": {
+            "N": "1"
+        }
+    }
+}
