@@ -2,6 +2,10 @@ output "aws_lambda_function_arn" {
   value = aws_lambda_function.lambda.arn
 }
 
+output "aws_lambda_function_name" {
+  value = aws_lambda_function.lambda.id
+}
+
 output "aws_dynamodb_table_arn" {
   value = aws_dynamodb_table.dynamodb.arn
 }
