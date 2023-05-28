@@ -12,7 +12,9 @@ def handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'body': json.dumps('SUCCESS'),
+        'date': datetime.now(JST).strftime('%Y-%m-%d %H:%M:%S'),
+        'contents': contents
     }
 
 def tweet(contents: str):
@@ -34,6 +36,6 @@ def random_choice_text() -> str:
     texts = []
     weights = []
     for item in items:
-        texts.append(item['text']+'\n'+'\n'+'('+now+')')
+        texts.append(item['contents'] +'\n'+ item['description'] +'\n'+'\n'+'('+now+')')
         weights.append(int(item['weight']))
     return random.choices(texts, k = 1, weights=weights)[0]

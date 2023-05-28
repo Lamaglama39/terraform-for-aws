@@ -1,12 +1,5 @@
-# ライブラリのインストール
-resource "terraform_data" "main" {
-  provisioner "local-exec" {
-    command = "bash ./conf/install.sh"
-  }
-}
-
+# Lambda関数のソースコードをzip形式で作成
 data "archive_file" "function_source" {
-  depends_on = [ terraform_data.main ]
 
   type        = "zip"
   source_dir  = "app"
