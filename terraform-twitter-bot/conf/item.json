@@ -3,8 +3,11 @@
         "hash": {
             "S": "data1"
         },
-        "text": {
+        "contents": {
             "S": "text1"
+        },
+        "description": {
+            "S": "string1"
         },
         "weight": {
             "N": "1"
@@ -14,8 +17,11 @@
         "hash": {
             "S": "data2"
         },
-        "text": {
+        "contents": {
             "S": "text2"
+        },
+        "description": {
+            "S": "string2"
         },
         "weight": {
             "N": "1"
@@ -25,8 +31,11 @@
         "hash": {
             "S": "data3"
         },
-        "text": {
+        "contents": {
             "S": "text3"
+        },
+        "description": {
+            "S": "string3"
         },
         "weight": {
             "N": "1"
