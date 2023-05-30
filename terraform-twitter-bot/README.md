@@ -12,6 +12,13 @@
 <img height="400px" src="./src/terraform-aws-twitterbot.drawio.png">
 </p>
 
+# 使用例
+例として、AWS CLIコマンドをツイートするBotを作成しています。
+<br>
+変更したのは、Lambdaの一部コードとDynamoDBに投入するアイテムのみです。
+
+https://twitter.com/aws_cli_tips
+
 # 事前準備
 
 - Twitter Developers で開発者アカウントを作成し、クレデンシャル情報を取得してください。
