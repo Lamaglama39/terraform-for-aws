@@ -5,8 +5,8 @@ output "ssm_command" {
 }
 
 output "ssh_command" {
-  value = "https://${aws_instance.server.public_ip}:64294"
+  value = "https://${aws_eip.eip.public_ip}:64294"
 }
 output "web_ui" {
-  value = "https://${aws_instance.server.public_ip}:64297"
+  value = "https://${aws_eip.eip.public_ip}:64297"
 }
