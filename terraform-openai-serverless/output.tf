@@ -6,6 +6,6 @@ output "aws_lambda_function_name" {
   value = aws_lambda_function.lambda.id
 }
 
-output "aws_api_gateway_deployment_invoke_url" {
-  value = "curl ${aws_api_gateway_deployment.deployment.invoke_url}${aws_api_gateway_resource.resource.path}?input_text=Hello."
+output "lambda_url" {
+  value = "curl ${aws_lambda_function_url.lambda_url.function_url}?input_text=Hello."
 }

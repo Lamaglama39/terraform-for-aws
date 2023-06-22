@@ -4,7 +4,7 @@ terraform {
 
 terraform {
   required_providers {
-    aws = ">= 4.0.0"
+    aws = ">= 4.9.0"
   }
 }
 provider "aws" {
