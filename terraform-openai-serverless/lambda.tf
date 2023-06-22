@@ -1,9 +1,5 @@
-data "archive_file" "function_source" {
-  type        = "zip"
-  source_dir  = "app/function"
-  output_path = "archive/lambda_function.zip"
-}
-
+# Lambda layer
+## モジュールインストール/zip処理
 locals {
   source_dir_files = fileset("app/python", "**/*")
 }
@@ -26,6 +22,26 @@ resource "null_resource" "layer_source" {
   }
 }
 
+## Lambda layer 作成
+resource "aws_lambda_layer_version" "lambda_layer" {
+  depends_on = [null_resource.layer_source]
+
+  layer_name = "openai"
+  filename   = "archive/openai.zip"
+
+  compatible_runtimes = ["python3.9"]
+  compatible_architectures = ["x86_64"]
+}
+
+# Lambda関数
+## zip処理
+data "archive_file" "function_source" {
+  type        = "zip"
+  source_dir  = "app/function"
+  output_path = "archive/lambda_function.zip"
+}
+
+## Lambda関数 作成
 resource "aws_lambda_function" "lambda" {
   architectures = ["x86_64"]
 
@@ -57,27 +73,9 @@ resource "aws_lambda_function" "lambda" {
   }
 }
 
-# Lambda レイヤー
-resource "aws_lambda_layer_version" "lambda_layer" {
-  depends_on = [null_resource.layer_source]
-
-  layer_name = "openai"
-  filename   = "archive/openai.zip"
-
-  compatible_runtimes = ["python3.9"]
-  compatible_architectures = ["x86_64"]
-}
-
-# API GatewayからLambdaを呼び出すための許可設定
-resource "aws_lambda_permission" "lambda_permission" {
-  statement_id  = "AllowMyDemoAPIInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-
-  # The /* part allows invocation from any stage, method and resource path
-  # within API Gateway.
-  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*"
+resource "aws_lambda_function_url" "lambda_url" {
+  function_name      = aws_lambda_function.lambda.function_name
+  authorization_type = "NONE"
 }
 
 # Lambda用IAMロール

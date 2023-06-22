@@ -18,13 +18,8 @@ def lambda_handler(event, context):
             {"role": "user", "content": input_text}, 
         ]
     )
-    # print("Received response:" + json.dumps(response,default=decimal_to_int, ensure_ascii=False))
-    # return response["choices"][0]["message"]["content"]
     return {
         'statusCode': 200,
-        # 'body': json.dumps({
-        #     'output_text':response["choices"][0]["message"]["content"]
-        # }),
         'body': response["choices"][0]["message"]["content"],
         'isBase64Encoded': False,
         'headers':{}
