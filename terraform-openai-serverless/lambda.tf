@@ -6,7 +6,7 @@ locals {
 
 resource "null_resource" "install_dependencies" {
   provisioner "local-exec" {
-    command = "python3 -m pip install -t ./app/python openai"
+    command = "python3 -m pip install -t ./app/python openai boto3"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash               = data.archive_file.function_source.output_base64sha256
   layers = ["${aws_lambda_layer_version.lambda_layer.arn}"]
 
-  timeout = "30"
+  timeout = "60"
 
   environment {
     variables = {
