@@ -2,19 +2,17 @@ import json
 import os
 import openai
 import boto3
+from botocore.exceptions import ClientError
 
 openai.api_key = os.environ['API_Key']
 API_ENDPOINT = os.environ['API_ENDPOINT']
 
 def lambda_handler(event, context):
-    # sourceIp の値を取得
-    sourceIp = event['requestContext']['http']['sourceIp']
     
     #DynamoDB 過去履歴確認
-    # dynamodb_search(sourceIp)
-
+    input_text = dynamodb_search(event)
+    
     # OpenAI API にリクエスト
-    input_text = event['queryStringParameters']['input_text']
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -23,7 +21,7 @@ def lambda_handler(event, context):
     )
 
     # DynamoDB 履歴更新
-    dynamodb_add(sourceIp,response)
+    dynamodb_add(event,response)
     
     # レスポンス
     return {
@@ -33,8 +31,40 @@ def lambda_handler(event, context):
         'headers':{}
     }
 
+
+# DynamoDBからの検索を行う関数
+def dynamodb_search(event):
+    sourceIp = event['requestContext']['http']['sourceIp']
+    
+    # DynamoDB オブジェクトを作成
+    dynamodb = boto3.resource('dynamodb')
+
+    # DynamoDBのテーブル名
+    table = dynamodb.Table('openai-table')
+
+    try:
+        # sourceIpと一致する項目の検索
+        response = table.get_item(
+            Key={
+                'sourceIp': sourceIp
+            }
+        )
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        # エラー時は今回のリクエストのテキストを返す
+        return event['queryStringParameters']['input_text']
+
+    # 項目が存在すれば、その内容を返す
+    if 'Item' in response:
+        return response['Item']['response']
+    else:
+        # 項目が存在しなければ今回のリクエストのテキストを返す
+        return event['queryStringParameters']['input_text']
+
+
 # DynamoDBへの追加を行う関数
-def dynamodb_add(sourceIp, response):
+def dynamodb_add(event, response):
+    sourceIp = event['requestContext']['http']['sourceIp']
     # DynamoDB オブジェクトを作成
     dynamodb = boto3.resource('dynamodb')
     
