@@ -8,42 +8,41 @@ openai.api_key = os.environ['API_Key']
 API_ENDPOINT = os.environ['API_ENDPOINT']
 
 def lambda_handler(event, context):
+    new_text = event['queryStringParameters']['input_text']
+    sourceIp = event['requestContext']['http']['sourceIp']
     
-    #DynamoDB 過去履歴確認
-    input_text = dynamodb_search(event)
-    
-    # OpenAI API にリクエスト
+    # DynamoDBから過去の会話を取得
+    conversation = dynamodb_search(new_text, sourceIp)
+
+    # 新しいメッセージを会話に追加
+    conversation.append({"role": "user", "content": event['queryStringParameters']['input_text']})
+
+    # OpenAI APIにリクエスト
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user", "content": input_text}, 
-        ]
+        messages=conversation
     )
 
-    # DynamoDB 履歴更新
-    dynamodb_add(event,response)
-    
+    # APIからの応答を会話に追加
+    conversation.append({"role": "assistant", "content": response["choices"][0]["message"]["content"]})
+
+    # DynamoDBの会話を更新
+    dynamodb_add(sourceIp, conversation)
+
     # レスポンス
     return {
         'statusCode': 200,
         'body': response["choices"][0]["message"]["content"],
         'isBase64Encoded': False,
-        'headers':{}
+        'headers': {}
     }
 
 
-# DynamoDBからの検索を行う関数
-def dynamodb_search(event):
-    sourceIp = event['requestContext']['http']['sourceIp']
-    
-    # DynamoDB オブジェクトを作成
+def dynamodb_search(new_text, sourceIp):
     dynamodb = boto3.resource('dynamodb')
-
-    # DynamoDBのテーブル名
     table = dynamodb.Table('openai-table')
 
     try:
-        # sourceIpと一致する項目の検索
         response = table.get_item(
             Key={
                 'sourceIp': sourceIp
@@ -51,35 +50,20 @@ def dynamodb_search(event):
         )
     except ClientError as e:
         print(e.response['Error']['Message'])
-        # エラー時は今回のリクエストのテキストを返す
-        return event['queryStringParameters']['input_text']
+        return [{"role": "system", "content": new_text}]
 
-    # 項目が存在すれば、その内容を返す
     if 'Item' in response:
-        return response['Item']['response']
+        return json.loads(response['Item']['conversation'])
     else:
-        # 項目が存在しなければ今回のリクエストのテキストを返す
-        return event['queryStringParameters']['input_text']
+        return [{"role": "system", "content": new_text}]
 
 
-# DynamoDBへの追加を行う関数
-def dynamodb_add(event, response):
-    sourceIp = event['requestContext']['http']['sourceIp']
-    # DynamoDB オブジェクトを作成
+def dynamodb_add(sourceIp, conversation):
     dynamodb = boto3.resource('dynamodb')
-    
-    # DynamoDBのテーブル名
     table = dynamodb.Table('openai-table')
-    
-    # responseはOpenAIからの応答なので、Pythonの辞書型オブジェクト
-    # DynamoDBは数値、文字列、辞書型など特定のデータタイプしか受け入れないため、必要に応じてjson.dumps()等を用いて適切な形式に変換する
-    # 応答をそのままJSON文字列に変換して格納する
-    response_str = json.dumps(response)
-    
-    # DynamoDBに追加
     table.put_item(
         Item={
             'sourceIp': sourceIp,
-            'response': response_str
+            'conversation': json.dumps(conversation)
         }
     )
