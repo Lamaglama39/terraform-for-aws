@@ -64,6 +64,6 @@ def dynamodb_add(sourceIp, conversation):
     table.put_item(
         Item={
             'sourceIp': sourceIp,
-            'conversation': json.dumps(conversation)
+            'conversation': json.dumps(conversation, ensure_ascii=False)
         }
     )
