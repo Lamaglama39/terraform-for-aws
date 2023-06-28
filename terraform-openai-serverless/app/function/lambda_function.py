@@ -10,7 +10,8 @@ API_ENDPOINT = os.environ['API_ENDPOINT']
 
 # Lambda関数
 def lambda_handler(event, context):
-    new_text = event['queryStringParameters']['input_text']
+    system_text = event['queryStringParameters'].get('system_text', 'Chat with OpenAI started.')
+    user_text = event['queryStringParameters']['user_text']
     sourceIp = event['requestContext']['http']['sourceIp']
     
     # DynamoDBから過去の会話を取得
@@ -18,10 +19,10 @@ def lambda_handler(event, context):
 
     # 初回利用の場合はsystem messageを追加
     if len(conversation) == 0:
-        conversation.append({"role": "system", "content": "Chat with OpenAI started."})
+        conversation.append({"role": "system", "content": system_text})
 
     # 新しいメッセージを会話に追加
-    conversation.append({"role": "user", "content": new_text})
+    conversation.append({"role": "user", "content": user_text})
 
     # OpenAI APIにリクエスト
     response = openai.ChatCompletion.create(

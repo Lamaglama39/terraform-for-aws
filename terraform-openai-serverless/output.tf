@@ -7,5 +7,5 @@ output "aws_lambda_function_name" {
 }
 
 output "lambda_url" {
-  value = "curl ${aws_lambda_function_url.lambda_url.function_url}?input_text=Hello."
+  value = "curl ${aws_lambda_function_url.lambda_url.function_url}?system_text='Your OpenAI API'&user_text='Hello'"
 }
