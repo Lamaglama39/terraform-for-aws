@@ -3,6 +3,7 @@ import os
 import openai
 import boto3
 from botocore.exceptions import ClientError
+import time
 
 openai.api_key = os.environ['API_Key']
 API_ENDPOINT = os.environ['API_ENDPOINT']
@@ -74,12 +75,16 @@ def truncate_conversation(conversation):
 
 
 # DynamoDB記録 関数
-def dynamodb_add(sourceIp, conversation):
+def dynamodb_add(sourceIp, conversation,):
+    # TTL用の現在時刻+30分の時刻
+    timeout = int(time.time() + 1800)
+
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('openai-table')
     table.put_item(
         Item={
             'sourceIp': sourceIp,
-            'conversation': json.dumps(conversation, ensure_ascii=False)
+            'conversation': json.dumps(conversation, ensure_ascii=False),
+            'Timeout': timeout
         }
     )
