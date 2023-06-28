@@ -12,6 +12,11 @@ resource "aws_dynamodb_table" "dynamodb" {
     enabled = "false"
   }
 
+  ttl {
+    attribute_name = "Timeout"
+    enabled        = true
+  }
+
   read_capacity    = "1"
   write_capacity   = "1"
   stream_enabled   = "true"
