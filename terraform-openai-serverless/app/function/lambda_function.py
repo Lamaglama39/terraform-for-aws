@@ -35,13 +35,18 @@ def lambda_handler(event, context):
 
     # DynamoDBの会話を更新
     dynamodb_add(sourceIp, conversation)
-
+    
     # レスポンス
     return {
         'statusCode': 200,
         'body': response["choices"][0]["message"]["content"],
         'isBase64Encoded': False,
-        'headers': {}
+        'headers': {
+            'Access-Control-Allow-Origin': '*', # 全てのオリジンからのアクセスを許可
+            'Access-Control-Allow-Headers': 'Content-Type', # Content-Type ヘッダーの使用を許可
+            'Access-Control-Allow-Methods': 'GET,POST,OPTIONS' # GET, POST, OPTIONS メソッドの使用を許可
+            }
+        
     }
 
 
