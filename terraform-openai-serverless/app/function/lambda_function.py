@@ -40,13 +40,7 @@ def lambda_handler(event, context):
     return {
         'statusCode': 200,
         'body': response["choices"][0]["message"]["content"],
-        'isBase64Encoded': False,
-        'headers': {
-            'Access-Control-Allow-Origin': '*', # 全てのオリジンからのアクセスを許可
-            'Access-Control-Allow-Headers': 'Content-Type', # Content-Type ヘッダーの使用を許可
-            'Access-Control-Allow-Methods': 'GET,POST,OPTIONS' # GET, POST, OPTIONS メソッドの使用を許可
-            }
-        
+        'isBase64Encoded': False
     }
 
 
