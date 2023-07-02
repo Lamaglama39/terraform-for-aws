@@ -10,6 +10,8 @@ API_ENDPOINT = os.environ['API_ENDPOINT']
 
 # Lambda関数
 def lambda_handler(event, context):
+    #クエリパラメータ
+    api_model = event['queryStringParameters'].get('api_model', 'gpt-3.5-turbo')
     system_text = event['queryStringParameters'].get('system_text', 'Chat with OpenAI started.')
     user_text = event['queryStringParameters']['user_text']
     sourceIp = event['requestContext']['http']['sourceIp']
@@ -26,7 +28,7 @@ def lambda_handler(event, context):
 
     # OpenAI APIにリクエスト
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=api_model,
         messages=conversation
     )
 
