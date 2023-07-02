@@ -7,5 +7,5 @@ output "aws_lambda_function_name" {
 }
 
 output "lambda_url" {
-  value = "${aws_lambda_function_url.lambda_url.function_url}?system_text=YourOpenAI&user_text=Hello"
+  value = "${aws_lambda_function_url.lambda_url.function_url}?api_model=gpt-3.5-turbo&system_text=YourOpenAI&user_text=Hello"
 }
