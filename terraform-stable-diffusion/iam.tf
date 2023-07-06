@@ -1,4 +1,4 @@
-# Session Manager用 IAMロール
+# stable diffusion用IAMロール
 data "aws_iam_policy_document" "assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -27,4 +27,27 @@ resource "aws_iam_role_policy_attachment" "ssm" {
 resource "aws_iam_instance_profile" "systems_manager" {
   name = "${var.name}-ssm-instanceProfile"
   role = aws_iam_role.role.name
+}
+
+# fleet_request用 IAMロール
+data "aws_iam_policy_document" "assume_role_fleet" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["spotfleet.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "spot-fleet-role" {
+  name               = "${var.name}-fleet-role"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role_fleet.json}"
+}
+
+resource "aws_iam_policy_attachment" "policy-attach" {
+  name = "${var.name}-fleet-attach"
+  roles      = ["${aws_iam_role.spot-fleet-role.id}"]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole"
 }
