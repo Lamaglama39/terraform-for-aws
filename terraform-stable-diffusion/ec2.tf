@@ -9,77 +9,69 @@ data "aws_ami" "deep_learning_ami" {
   }
 }
 
-# stable diffusion server
-resource "aws_instance" "server" {
-  ami           = data.aws_ami.deep_learning_ami.id
-  instance_type = var.ec2_instance_type
-  iam_instance_profile = aws_iam_instance_profile.systems_manager.name
-  subnet_id            = aws_subnet.public.id
-  vpc_security_group_ids = ["${aws_security_group.server.id}"]
-  associate_public_ip_address = true
-  key_name               = aws_key_pair.key_pair.id
-  user_data = file("./conf/userdata.sh")
-  ebs_optimized = "true"
+# Launch template
+resource "aws_launch_template" "launch_template" {
+  name = "${var.name}-launch-template"
 
-    # EBS ルートボリューム設定
-    root_block_device {
-        volume_size = 100
-        volume_type = "gp3"
-        iops = 3000
-        throughput = 125
-        delete_on_termination = true
-        tags = {
-            Name = "${var.name}-ebs"
-        }
+  ebs_optimized = true
+  block_device_mappings {
+    device_name = "/dev/sdf"
+
+    ebs {
+      volume_size = 100
     }
-
-  tags = {
-    Name = "${var.name}-server"
   }
-}
 
-# eip
-resource "aws_eip" "eip" {
-  instance = aws_instance.server.id
-  vpc = true
-}
-
-
-# ssh key
-variable "key_name" {
-  type        = string
-  description = "ansible-key"
-  default     = "ansible-key"
-}
-
-locals {
-  public_key_file  = "./.key_pair/${var.key_name}.id_rsa.pub"
-  private_key_file = "./.key_pair/${var.key_name}.id_rsa"
-}
-
-resource "tls_private_key" "keygen" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "local_file" "private_key_pem" {
-  filename = local.private_key_file
-  content  = tls_private_key.keygen.private_key_pem
-  provisioner "local-exec" {
-    command = "chmod 600 ${local.private_key_file}"
+  iam_instance_profile {
+    name = aws_iam_instance_profile.systems_manager.name
   }
-}
+  image_id = data.aws_ami.deep_learning_ami.id
 
-resource "local_file" "public_key_openssh" {
-  filename = local.public_key_file
-  content  = tls_private_key.keygen.public_key_openssh
-  provisioner "local-exec" {
-    command = "chmod 600 ${local.public_key_file}"
+  instance_market_options {
+    market_type = "spot"
   }
+  instance_type = var.ec2_instance_type
+
+  network_interfaces {
+    associate_public_ip_address = true
+    subnet_id = aws_subnet.public.id
+    security_groups = ["${aws_security_group.server.id}"]
+  }
+
+  placement {
+    availability_zone = "ap-northeast-1a"
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = "${var.name}-server"
+    }
+  }
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+    instance_metadata_tags      = "enabled"
+  }
+
+  user_data = filebase64("./conf/userdata.sh")
 }
 
-# aws key pair
-resource "aws_key_pair" "key_pair" {
-  key_name   = var.key_name
-  public_key = tls_private_key.keygen.public_key_openssh
+
+# spot fleet
+resource "aws_spot_fleet_request" "spot_fleet_request" {
+  iam_fleet_role  = "${aws_iam_role.spot-fleet-role.arn}"
+  spot_price      = "0.6"
+  target_capacity = 1
+  terminate_instances_with_expiration = true
+
+  launch_template_config {
+    launch_template_specification {
+      id      = aws_launch_template.launch_template.id
+      version = aws_launch_template.launch_template.latest_version
+    }
+  }
 }
