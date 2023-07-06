@@ -1,11 +1,11 @@
 #AMI
 data "aws_ami" "deep_learning_ami" {
   most_recent = true
-  owners = [ "amazon" ]
+  owners      = ["amazon"]
   filter {
     name = "name"
 
-    values = [ "Deep Learning AMI GPU PyTorch 1.13.1 (Amazon Linux 2)*" ]
+    values = ["Deep Learning AMI GPU PyTorch 1.13.1 (Amazon Linux 2)*"]
   }
 }
 
@@ -17,8 +17,8 @@ resource "aws_launch_template" "launch_template" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
-      volume_size = 100
-      volume_type = "gp3"
+      volume_size           = 100
+      volume_type           = "gp3"
       delete_on_termination = true
     }
   }
@@ -35,8 +35,8 @@ resource "aws_launch_template" "launch_template" {
 
   network_interfaces {
     associate_public_ip_address = true
-    subnet_id = aws_subnet.public.id
-    security_groups = ["${aws_security_group.server.id}"]
+    subnet_id                   = aws_subnet.public.id
+    security_groups             = ["${aws_security_group.server.id}"]
   }
 
   placement {
@@ -64,9 +64,9 @@ resource "aws_launch_template" "launch_template" {
 
 # spot fleet
 resource "aws_spot_fleet_request" "spot_fleet_request" {
-  iam_fleet_role  = "${aws_iam_role.spot-fleet-role.arn}"
-  spot_price      = "0.6"
-  target_capacity = 1
+  iam_fleet_role                      = aws_iam_role.spot-fleet-role.arn
+  spot_price                          = "0.6"
+  target_capacity                     = 1
   terminate_instances_with_expiration = true
 
   launch_template_config {

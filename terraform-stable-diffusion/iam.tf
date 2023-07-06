@@ -18,10 +18,17 @@ resource "aws_iam_role" "role" {
 data "aws_iam_policy" "systems_manager" {
   arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+data "aws_iam_policy" "s3" {
+  arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
 
 resource "aws_iam_role_policy_attachment" "ssm" {
   role       = aws_iam_role.role.name
   policy_arn = data.aws_iam_policy.systems_manager.arn
+}
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.role.name
+  policy_arn = data.aws_iam_policy.s3.arn
 }
 
 resource "aws_iam_instance_profile" "systems_manager" {
@@ -43,11 +50,11 @@ data "aws_iam_policy_document" "assume_role_fleet" {
 
 resource "aws_iam_role" "spot-fleet-role" {
   name               = "${var.name}-fleet-role"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role_fleet.json}"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_fleet.json
 }
 
 resource "aws_iam_policy_attachment" "policy-attach" {
-  name = "${var.name}-fleet-attach"
+  name       = "${var.name}-fleet-attach"
   roles      = ["${aws_iam_role.spot-fleet-role.id}"]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole"
 }
