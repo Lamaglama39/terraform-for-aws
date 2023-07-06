@@ -15,10 +15,11 @@ resource "aws_launch_template" "launch_template" {
 
   ebs_optimized = true
   block_device_mappings {
-    device_name = "/dev/sdf"
-
+    device_name = "/dev/xvda"
     ebs {
       volume_size = 100
+      volume_type = "gp3"
+      delete_on_termination = true
     }
   }
 
@@ -73,5 +74,24 @@ resource "aws_spot_fleet_request" "spot_fleet_request" {
       id      = aws_launch_template.launch_template.id
       version = aws_launch_template.launch_template.latest_version
     }
+  }
+}
+
+# eip
+resource "aws_eip" "eip" {
+  vpc = true
+}
+
+resource "null_resource" "associate_eip" {
+  depends_on = [aws_spot_fleet_request.spot_fleet_request]
+
+  provisioner "local-exec" {
+    command = <<EOF
+    sleep 180
+    EIP=${aws_eip.eip.public_ip}
+    REGION=ap-northeast-1
+    INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=terraform-stable-diffusion-webUI-server" --query "Reservations[*].Instances[*].InstanceId" --output text)
+    aws ec2 associate-address --instance-id $INSTANCE_ID --public-ip $EIP --region $REGION
+    EOF
   }
 }
