@@ -1,4 +1,4 @@
-#AMI
+# AMI
 data "aws_ami" "deep_learning_ami" {
   most_recent = true
   owners      = ["amazon"]
@@ -61,13 +61,20 @@ resource "aws_launch_template" "launch_template" {
   user_data = filebase64("./conf/userdata.sh")
 }
 
+# スポットインスタンス 終了時刻
+locals {
+  future_time = timeadd(local.current_time, var.end_time)
+}
 
-# spot fleet
+# スポットリクエスト
 resource "aws_spot_fleet_request" "spot_fleet_request" {
+  # 指定しない場合はオンデマンド料金
+  spot_price = var.price
+
   iam_fleet_role                      = aws_iam_role.spot-fleet-role.arn
-  spot_price                          = "0.6"
   target_capacity                     = 1
   terminate_instances_with_expiration = true
+  valid_until                         = local.future_time
 
   launch_template_config {
     launch_template_specification {
@@ -85,6 +92,7 @@ resource "aws_eip" "eip" {
 resource "null_resource" "associate_eip" {
   depends_on = [aws_spot_fleet_request.spot_fleet_request]
 
+  # EIP付与処理
   provisioner "local-exec" {
     command = <<EOF
     sleep 180
