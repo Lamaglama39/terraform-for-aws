@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "ssm" {
   role       = aws_iam_role.role.name
   policy_arn = data.aws_iam_policy.systems_manager.arn
 }
-resource "aws_iam_role_policy_attachment" "ssm" {
+resource "aws_iam_role_policy_attachment" "s3" {
   role       = aws_iam_role.role.name
   policy_arn = data.aws_iam_policy.s3.arn
 }
