@@ -1,9 +1,9 @@
 /* eslint-env node */
 
 module.exports = {
-  globals: {
-    process: "readonly",
-  },
+  // globals: {
+  //   process: "readonly",
+  // },
   env: { browser: true, es2020: true },
   extends: [
     "eslint:recommended",
