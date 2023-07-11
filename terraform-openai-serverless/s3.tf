@@ -1,6 +1,8 @@
 # OACを利用したS3バケット
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = "${var.project_name}-s3-website"
+  # force_destroy
+  force_destroy = true
 }
 
 # bucket policy

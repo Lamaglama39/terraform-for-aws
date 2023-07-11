@@ -24,7 +24,7 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
     ]);
 
     // CloudFront ディストリビューションドメイン名
-    const url = process.env.REACT_APP_CLOUDFRONT_DOMAIN;
+    const url = import.meta.env.VITE_LAMBDA_URL;
     const params = {
       system_text: formState.system_text,
       user_text: formState.user_text,

@@ -5,7 +5,6 @@ import "./App.css";
 
 const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
-
   return (
     <div>
       <ChatDisplay chatHistory={chatHistory} />
