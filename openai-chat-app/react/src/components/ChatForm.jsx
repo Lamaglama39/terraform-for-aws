@@ -5,6 +5,7 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
   const [formState, setFormState] = useState({
     system_text: "",
     user_text: "",
+    api_model: "gpt-3.5-turbo",
   });
 
   const handleInputChange = (event) => {
@@ -28,6 +29,7 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
     const params = {
       system_text: formState.system_text,
       user_text: formState.user_text,
+      api_model: formState.api_model,
     };
 
     axios
@@ -77,6 +79,21 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
             value={formState.system_text}
             onChange={handleInputChange}
           />
+        </label>
+        <label style={{ marginRight: "10px" }}>
+          APIモデル:
+          <select
+            name="api_model"
+            value={formState.api_model}
+            onChange={handleInputChange}
+          >
+            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+            <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
+            <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
+            <option value="gpt-3.5-turbo-16k-0613">
+              gpt-3.5-turbo-16k-0613
+            </option>
+          </select>
         </label>
         <input type="submit" value="送信" />
       </div>
