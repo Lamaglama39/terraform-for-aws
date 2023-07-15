@@ -37,9 +37,10 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
       .then((response) => {
         console.log(response);
         // システムのメッセージをチャットの履歴に追加
+        const sanitizedMessage = response.data.replace(/\n/g, "<br />");
         setChatHistory((prevChatHistory) => [
           ...prevChatHistory,
-          { message: response.data, type: "system" },
+          { message: sanitizedMessage, type: "system" },
         ]);
       })
       .catch((error) => {
