@@ -13,7 +13,7 @@ const ChatDisplay = ({ chatHistory }) => {
     >
       {chatHistory.map((chat, index) => (
         <div key={index} className={`message ${chat.type}`}>
-          {chat.message}
+          <div dangerouslySetInnerHTML={{ __html: chat.message }}></div>
         </div>
       ))}
     </div>
