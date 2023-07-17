@@ -28,9 +28,19 @@
 .message {
   width: max-content;
   max-width: 50%;
-  padding: 1%;
-  margin-bottom: 2vh;
+  padding: 2vh;
+  margin: 3vh;
   border-radius: 1vh ;
+  position: relative; /* Add this */
+}
+
+.icon {
+  position: absolute;
+  top: -10px; /* Adjust as needed */
+  width: 5vh; /* Adjust as needed */
+  height: 5vh; /* Adjust as needed */
+  background-color: black;
+  border-radius: 50%;
 }
 
 /* ユーザーメッセージ */
@@ -39,10 +49,20 @@
   background-color: #e6e6e6;
 }
 
+.user .icon {
+  transform: translate(50%, -25%); /* Adjust as needed */
+  right: 0; /* Adjust as needed */
+}
+
 /* システムメッセージ */
 .system {
   align-self: flex-start;
   background-color: #e6e6e6;
+}
+
+.system .icon {
+  transform: translate(-50%, -25%); /* Adjust as needed */
+  left: 0; /* Adjust as needed */
 }
 
 /* フォーム全体 */
