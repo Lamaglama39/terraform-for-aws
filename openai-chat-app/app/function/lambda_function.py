@@ -18,13 +18,16 @@ def lambda_handler(event, context):
     
     # DynamoDBから過去の会話を取得
     conversation = dynamodb_search(sourceIp)
-
+    
     # 初回利用の場合はsystem messageを追加
     if len(conversation) == 0:
         conversation.append({"role": "system", "content": system_text})
 
     # 新しいメッセージを会話に追加
     conversation.append({"role": "user", "content": user_text})
+    
+    # 文字制限超過分を古い順でから削除
+    conversation =  truncate_conversation(conversation)
 
     # OpenAI APIにリクエスト
     response = openai.ChatCompletion.create(
