@@ -6,7 +6,7 @@ import "./App.css";
 const App = () => {
   const [chatHistory, setChatHistory] = useState([]);
   return (
-    <div>
+    <div className="page">
       <ChatDisplay chatHistory={chatHistory} />
       <ChatForm chatHistory={chatHistory} setChatHistory={setChatHistory} />
     </div>
