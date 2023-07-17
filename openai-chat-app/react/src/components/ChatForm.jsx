@@ -17,6 +17,7 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (formState.user_text === "") return;
 
     // ユーザーのメッセージをすぐにチャットの履歴に追加
     setChatHistory([
