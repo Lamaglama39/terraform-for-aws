@@ -50,63 +50,55 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        position: "fixed",
-        bottom: "0",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#fff",
-        padding: "20px",
-        borderTop: "1px solid #ccc",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <label style={{ marginRight: "10px" }}>
-          システムテキスト:
+    <form onSubmit={handleSubmit} className="bottom-form">
+      <div className="form-wrap">
+        <div className="form-area system-form">
+          <label style={{ marginRight: "10px" }}>
+            AIの役割/性格:
+            <textarea
+              placeholder="AIの役割とか性格を入力してね。"
+              name="system_text"
+              value={formState.system_text}
+              onChange={handleInputChange}
+              className="text-area"
+            ></textarea>
+          </label>
+          <label style={{ marginRight: "10px" }}>
+            APIモデル:
+            <select
+              name="api_model"
+              value={formState.api_model}
+              onChange={handleInputChange}
+            >
+              <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+              <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
+              <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
+              <option value="gpt-3.5-turbo-16k-0613">
+                gpt-3.5-turbo-16k-0613
+              </option>
+            </select>
+          </label>
+        </div>
+        <div className="form-area user-form">
+          <label>
+            チャット内容:
+            <textarea
+              className="text-area"
+              placeholder="チャット内容を入力してね。"
+              name="user_text"
+              value={formState.user_text}
+              onChange={handleInputChange}
+            ></textarea>
+          </label>
           <input
-            type="text"
-            name="system_text"
-            value={formState.system_text}
-            onChange={handleInputChange}
+            type="submit"
+            value="送信"
+            style={{
+              width: "width: 100%",
+            }}
           />
-        </label>
-        <label style={{ marginRight: "10px" }}>
-          APIモデル:
-          <select
-            name="api_model"
-            value={formState.api_model}
-            onChange={handleInputChange}
-          >
-            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-            <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
-            <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
-            <option value="gpt-3.5-turbo-16k-0613">
-              gpt-3.5-turbo-16k-0613
-            </option>
-          </select>
-        </label>
-        <input type="submit" value="送信" />
+        </div>
       </div>
-      <label>
-        ユーザーテキスト:
-        <input
-          type="text"
-          name="user_text"
-          value={formState.user_text}
-          onChange={handleInputChange}
-        />
-      </label>
     </form>
   );
 };
