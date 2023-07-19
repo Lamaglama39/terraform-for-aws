@@ -33,6 +33,13 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
       api_model: formState.api_model,
     };
 
+    // user_textとsystem_textを空にリセット
+    setFormState({
+      ...formState,
+      user_text: "",
+      system_text: "",
+    });
+
     axios
       .get(url, { params })
       .then((response) => {
