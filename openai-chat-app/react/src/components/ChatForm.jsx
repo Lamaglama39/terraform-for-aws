@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import useChatApi from "./useChatApi";
 
 const ChatForm = ({ chatHistory, setChatHistory }) => {
   const [formState, setFormState] = useState({
@@ -7,6 +7,8 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
     user_text: "",
     api_model: "gpt-3.5-turbo",
   });
+
+  const { fetchChatResponse } = useChatApi(); // 使用
 
   const handleInputChange = (event) => {
     setFormState({
@@ -19,7 +21,7 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
     event.preventDefault();
     if (formState.user_text === "") return;
 
-    // ユーザーのメッセージをすぐにチャットの履歴に追加
+    // ユーザーのメッセージをチャットの履歴に追加
     setChatHistory([
       ...chatHistory,
       { message: formState.user_text, type: "user" },
@@ -39,22 +41,13 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
       user_text: "",
       system_text: "",
     });
-
-    axios
-      .get(url, { params })
-      .then((response) => {
-        console.log(response);
-        // システムのメッセージをチャットの履歴に追加
-        const sanitizedMessage = response.data.replace(/\n/g, "<br />");
-        setChatHistory((prevChatHistory) => [
-          ...prevChatHistory,
-          { message: sanitizedMessage, type: "system" },
-        ]);
-      })
-      .catch((error) => {
-        console.log(url, { params });
-        console.error("Error:", error);
-      });
+    // レスポンスをメッセージ履歴に追加
+    fetchChatResponse(url, params, (sanitizedMessage) => {
+      setChatHistory((prevChatHistory) => [
+        ...prevChatHistory,
+        { message: sanitizedMessage, type: "system" },
+      ]);
+    });
   };
 
   return (
