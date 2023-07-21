@@ -11,14 +11,23 @@ API_ENDPOINT = os.environ['API_ENDPOINT']
 # Lambda関数
 def lambda_handler(event, context):
     #クエリパラメータ
-    api_model = event['queryStringParameters'].get('api_model', 'gpt-3.5-turbo')
-    system_text = event['queryStringParameters'].get('system_text', 'Chat with OpenAI started.')
-    user_text = event['queryStringParameters']['user_text']
+    load = event['queryStringParameters'].get('load', "False")
     sourceIp = event['requestContext']['http']['sourceIp']
     
     # DynamoDBから過去の会話を取得
     conversation = dynamodb_search(sourceIp)
     
+    if load == "True":
+        return {
+            'statusCode': 200,
+            'body': conversation,
+            'isBase64Encoded': False
+            }
+
+
+    api_model = event['queryStringParameters'].get('api_model', 'gpt-3.5-turbo')
+    system_text = event['queryStringParameters'].get('system_text', 'Chat with OpenAI started.')
+    user_text = event['queryStringParameters']['user_text']
     # system textがあれば追加
     if len(system_text) != 0:
         conversation.append({"role": "system", "content": system_text})
