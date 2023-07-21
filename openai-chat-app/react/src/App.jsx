@@ -6,7 +6,7 @@ import "./App.css";
 
 const App = () => {
   const loadUrl = import.meta.env.VITE_LAMBDA_URL;
-  const loadParams = { load: true };
+  const loadParams = { load: "True" };
   const [chatHistory, setChatHistory] = useState([]);
   const { isLoading, fetchChatResponse } = useLoadChatApi();
 
