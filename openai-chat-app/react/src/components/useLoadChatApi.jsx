@@ -1,11 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 
+const sleep = (waitTime) =>
+  new Promise((resolve) => setTimeout(resolve, waitTime));
+
 const useLoadChatApi = () => {
   const [isLoading, setLoading] = useState(false);
 
-  const fetchChatResponse = (url, params, onSuccess) => {
+  const fetchChatResponse = async (url, params, onSuccess) => {
     setLoading(true);
+    await sleep(500);
 
     axios
       .get(url, { params })

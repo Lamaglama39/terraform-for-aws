@@ -56,16 +56,6 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
         <div className="form-area system-form">
           <label style={{ marginRight: "10px" }}>
             AIの役割/性格:
-            <textarea
-              placeholder="AIの役割とか性格を入力してね。"
-              name="system_text"
-              value={formState.system_text}
-              onChange={handleInputChange}
-              className="text-area"
-            ></textarea>
-          </label>
-          <label style={{ marginRight: "10px" }}>
-            APIモデル:
             <select
               name="api_model"
               value={formState.api_model}
@@ -78,6 +68,13 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
                 gpt-3.5-turbo-16k-0613
               </option>
             </select>
+            <textarea
+              placeholder="AIの役割とか性格を入力してね。"
+              name="system_text"
+              value={formState.system_text}
+              onChange={handleInputChange}
+              className="text-area"
+            ></textarea>
           </label>
         </div>
         <div className="form-area user-form">

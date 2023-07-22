@@ -10,13 +10,25 @@
   width: 100% ;
 }
 
+.loading {
+  text-align: center;
+  font-weight: bold;
+  width: 80%;
+  font-size: 2.5vh;
+  position: absolute; /* 絶対位置を設定 */
+  top: 35vh; /* 上から50%の位置 */
+  left: 50vw; /* 左から50%の位置 */
+  transform: translate(-50%, -50%); /* 要素自体の50%ずらして中央揃え */
+  z-index: 1000; /* 他の要素より前面に表示 */
+}
+
 /* チャットエリア全体 */
 .chat {
   position: fixed;
   left: 0;
   right: 0;
   overflow: auto;
-  height: 75vh;
+  height: 80vh;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -30,15 +42,27 @@
   max-width: 50%;
   padding: 2vh;
   margin: 3vh;
-  border-radius: 1vh ;
-  position: relative; /* Add this */
+  border-radius: 1vh;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.5s ease-out;
+  visibility: hidden;
 }
+
+/* メッセージ表示時の設定 */
+.message.show {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+}
+
 
 .icon {
   position: absolute;
-  top: -10px; /* Adjust as needed */
-  width: 5vh; /* Adjust as needed */
-  height: 5vh; /* Adjust as needed */
+  top: -10px;
+  width: 5vh;
+  height: 5vh;
   background-color: black;
   border-radius: 50%;
 }
@@ -50,8 +74,8 @@
 }
 
 .user .icon {
-  transform: translate(50%, -25%); /* Adjust as needed */
-  right: 0; /* Adjust as needed */
+  transform: translate(50%, -25%);
+  right: 0;
 }
 
 /* システムメッセージ */
@@ -61,8 +85,8 @@
 }
 
 .system .icon {
-  transform: translate(-50%, -25%); /* Adjust as needed */
-  left: 0; /* Adjust as needed */
+  transform: translate(-50%, -25%);
+  left: 0;
 }
 
 /* フォーム全体 */
@@ -70,7 +94,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 25vh;
+  height: 20vh;
 }
 
 /* フォームエリア全体 */
@@ -88,7 +112,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%;
+  width: 100%;
   height: 100%;
 }
 
@@ -103,4 +127,36 @@
 }
 .user-form {
   background-color: #BFBFBF;
+}
+
+/* ローディングアイコン用 */
+.loading-icon {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0); /* 背景色の透明度を0に設定 */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #000;
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ChatDisplay from "./components/ChatDisplay";
 import ChatForm from "./components/ChatForm";
 import useLoadChatApi from "./components/useLoadChatApi";
+import LoadingIcon from "./components/LoadingIcon";
 import "./App.css";
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
     <div className="page">
       <ChatDisplay chatHistory={chatHistory} />
       <ChatForm chatHistory={chatHistory} setChatHistory={setChatHistory} />
+      {isLoading ? <LoadingIcon /> : <></>}
     </div>
   );
 };
