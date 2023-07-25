@@ -89,6 +89,11 @@
   left: 0;
 }
 
+/* 履歴削除button */
+.delete-btn {
+  position: fixed;
+}
+
 /* フォーム全体 */
 .bottom-form {
   position: fixed;

@@ -17,6 +17,7 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
     });
   };
 
+  // OpenAIチャット処理
   const handleSubmit = (event) => {
     event.preventDefault();
     if (formState.user_text === "") return;
@@ -50,54 +51,88 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
     });
   };
 
+  // 履歴削除処理
+  const handleDelete = (event) => {
+    event.preventDefault();
+
+    // CloudFront ディストリビューションドメイン名
+    const url = import.meta.env.VITE_LAMBDA_URL;
+    const params = {
+      delete: "True",
+    };
+
+    fetchChatResponse(url, params, () => {
+      // 履歴を削除
+      setChatHistory([]);
+    });
+
+    // user_textとsystem_textを空にリセット
+    setFormState({
+      ...formState,
+      user_text: "",
+      system_text: "",
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="bottom-form">
-      <div className="form-wrap">
-        <div className="form-area system-form">
-          <label style={{ marginRight: "10px" }}>
-            AIの役割/性格:
-            <select
-              name="api_model"
-              value={formState.api_model}
-              onChange={handleInputChange}
-            >
-              <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-              <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
-              <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
-              <option value="gpt-3.5-turbo-16k-0613">
-                gpt-3.5-turbo-16k-0613
-              </option>
-            </select>
-            <textarea
-              placeholder="AIの役割とか性格を入力してね。"
-              name="system_text"
-              value={formState.system_text}
-              onChange={handleInputChange}
-              className="text-area"
-            ></textarea>
-          </label>
+    <>
+      <form onSubmit={handleDelete} className="delete-btn">
+        <input
+          type="submit"
+          value="チャット履歴削除"
+          style={{
+            width: "width: 100%",
+          }}
+        />
+      </form>
+      <form onSubmit={handleSubmit} className="bottom-form">
+        <div className="form-wrap">
+          <div className="form-area system-form">
+            <label style={{ marginRight: "10px" }}>
+              AIの役割/性格:
+              <select
+                name="api_model"
+                value={formState.api_model}
+                onChange={handleInputChange}
+              >
+                <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
+                <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
+                <option value="gpt-3.5-turbo-16k-0613">
+                  gpt-3.5-turbo-16k-0613
+                </option>
+              </select>
+              <textarea
+                placeholder="AIの役割とか性格を入力してね。"
+                name="system_text"
+                value={formState.system_text}
+                onChange={handleInputChange}
+                className="text-area"
+              ></textarea>
+            </label>
+          </div>
+          <div className="form-area user-form">
+            <label>
+              チャット内容:
+              <textarea
+                className="text-area"
+                placeholder="チャット内容を入力してね。"
+                name="user_text"
+                value={formState.user_text}
+                onChange={handleInputChange}
+              ></textarea>
+            </label>
+            <input
+              type="submit"
+              value="送信"
+              style={{
+                width: "width: 100%",
+              }}
+            />
+          </div>
         </div>
-        <div className="form-area user-form">
-          <label>
-            チャット内容:
-            <textarea
-              className="text-area"
-              placeholder="チャット内容を入力してね。"
-              name="user_text"
-              value={formState.user_text}
-              onChange={handleInputChange}
-            ></textarea>
-          </label>
-          <input
-            type="submit"
-            value="送信"
-            style={{
-              width: "width: 100%",
-            }}
-          />
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 
