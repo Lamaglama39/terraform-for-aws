@@ -12,11 +12,23 @@ API_ENDPOINT = os.environ['API_ENDPOINT']
 def lambda_handler(event, context):
     #クエリパラメータ
     load = event['queryStringParameters'].get('load', "False")
+    delete = event['queryStringParameters'].get('delete', "False")
     sourceIp = event['requestContext']['http']['sourceIp']
     
+    # 履歴削除処理
+    if delete == "True":
+        # DynamoDBアイテム削除処理
+        dynamodb_delete(sourceIp)
+        return {
+            'statusCode': 200,
+            'body': "delete complete",
+            'isBase64Encoded': False
+            }
+
     # DynamoDBから過去の会話を取得
     conversation = dynamodb_search(sourceIp)
-    
+
+    # 履歴レスポンス処理
     if load == "True":
         return {
             'statusCode': 200,
@@ -56,6 +68,22 @@ def lambda_handler(event, context):
         'body': response["choices"][0]["message"]["content"],
         'isBase64Encoded': False
     }
+    
+
+# DynamoDB削除 関数
+def dynamodb_delete(sourceIp):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('openai-table')
+    
+    try:
+        response = table.delete_item(
+            Key={
+                'sourceIp': sourceIp
+            }
+        )
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+        return []
 
 
 # DynamoDB検索 関数
