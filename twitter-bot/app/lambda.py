@@ -28,7 +28,7 @@ def tweet(contents: str):
 
 def random_choice_text() -> str:
     db = boto3.resource('dynamodb')
-    table = db.Table('twitter-bot-table')
+    table = db.Table(os.environ['dynamodb_name'])
     res = table.scan()
     items = res['Items']
     
