@@ -30,3 +30,4 @@ terraform.rc
 
 # lambda archive file
 *archive*
+conf/item.json

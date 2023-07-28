@@ -25,5 +25,8 @@ for i, line in enumerate(lines, start=1):
 # ディクショナリをJSON形式の文字列に変換
 json_string = json.dumps(data_dict, indent=4)
 
+# \nのエスケープを修正
+json_string = json_string.replace('\\\\n', '\\n')
+
 with open('./conf/item.json', 'w') as file:
     file.write(json_string)
