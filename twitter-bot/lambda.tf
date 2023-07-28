@@ -13,25 +13,26 @@ resource "aws_lambda_function" "lambda" {
   ephemeral_storage {
     size = "512"
   }
-  function_name                  = "twitter_bot"
+  function_name                  = var.lambda_name
   handler                        = "lambda.handler"
   memory_size                    = "128"
   package_type                   = "Zip"
   reserved_concurrent_executions = "-1"
   role                           = aws_iam_role.iam_role.arn
   runtime                        = "python3.9"
-  filename         = data.archive_file.function_source.output_path
-  source_code_hash = data.archive_file.function_source.output_base64sha256
+  filename                       = data.archive_file.function_source.output_path
+  source_code_hash               = data.archive_file.function_source.output_base64sha256
 
   timeout = "5"
 
   # Twitterクレデンシャル情報の設定
   environment {
     variables = {
-      api_key = "${var.api_key}"
-      api_secret_key = "${var.api_secret_key}"
-      acces_token = "${var.acces_token}"
-      acces_token_secrete  = "${var.acces_token_secrete}"
+      api_key             = "${var.api_key}"
+      api_secret_key      = "${var.api_secret_key}"
+      acces_token         = "${var.acces_token}"
+      acces_token_secrete = "${var.acces_token_secrete}"
+      dynamodb_name       = "${var.dynamodb_name}"
     }
   }
   tracing_config {
@@ -64,9 +65,9 @@ resource "aws_iam_role" "iam_role" {
 }
 POLICY
 
-  description          = "iam_role_lambda-twitter-bot"
+  description          = var.iamrole_name
   managed_policy_arns  = ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess", "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"]
   max_session_duration = "43200"
-  name                 = "iam_role_lambda-twitter-bot"
+  name                 = var.iamrole_name
   path                 = "/"
 }

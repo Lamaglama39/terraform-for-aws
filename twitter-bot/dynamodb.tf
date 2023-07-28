@@ -1,5 +1,5 @@
 variable "items" {
-  type = string
+  type    = string
   default = "./conf/item.json"
 }
 
@@ -11,7 +11,7 @@ resource "aws_dynamodb_table" "dynamodb" {
 
   billing_mode = "PROVISIONED"
   hash_key     = "hash"
-  name         = "twitter-bot-table"
+  name         = var.dynamodb_name
 
   point_in_time_recovery {
     enabled = "false"

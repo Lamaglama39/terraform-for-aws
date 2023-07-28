@@ -2,8 +2,8 @@
 resource "aws_cloudwatch_event_rule" "event" {
   event_bus_name      = "default"
   is_enabled          = "true"
-  name                = "twitter_ebvent"
-  schedule_expression = "rate(60 minutes)"
+  name                = var.eventbridge_name
+  schedule_expression = var.eventbridge_schedule
 }
 
 resource "aws_cloudwatch_event_target" "target" {
