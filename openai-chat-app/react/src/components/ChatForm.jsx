@@ -99,6 +99,10 @@ const ChatForm = ({ chatHistory, setChatHistory }) => {
           <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
           <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo-0613</option>
           <option value="gpt-3.5-turbo-16k-0613">gpt-3.5-turbo-16k-0613</option>
+          <option value="gpt-4">gpt-4</option>
+          <option value="gpt-4-0314">gpt-4-0314</option>
+          <option value="gpt-4-32k">gpt-4-32k</option>
+          <option value="gpt-4-32k-0314">gpt-4-32k-0314</option>
         </select>
       </div>
       <form onSubmit={handleSubmit} className="bottom-form">
