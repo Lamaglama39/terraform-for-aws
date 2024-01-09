@@ -7,12 +7,12 @@ S3クロスアカウント連携用の環境を構築します。
 # 構成図
 ## ①AssumeRoleを利用しないパターン
 <p>
-<img height="400px" src="./src/bucketpolicy-image.png">
+<img height="400px" src="./src/don&apos;t-use-assumerole-image.png">
 </p>
 
 ## ②AssumeRoleを利用するパターン
 <p>
-<img height="400px" src="./src/assumerole-image.png">
+<img height="400px" src="./src/use-assumerole-image.png">
 </p>
 
 # 使い方
