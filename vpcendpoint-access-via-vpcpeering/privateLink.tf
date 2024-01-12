@@ -13,6 +13,10 @@ subnet_ids        = [aws_subnet.public_subnet_b.id]
   security_group_ids = [
     aws_security_group.sg_vpcendpoint_1.id,
   ]
+
+    depends_on = [
+    aws_vpc_endpoint_service_allowed_principal.allowed_principal
+  ]
 }
 
 

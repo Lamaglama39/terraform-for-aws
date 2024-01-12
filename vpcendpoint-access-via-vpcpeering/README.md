@@ -27,7 +27,6 @@ role_arn = arn:aws:iam::<アカウント②ID>:role/<IAM Role名>
 source_profile = default
 ```
 
-
 (2) providers.tfのprofileに、$HOME/.aws/configで設定したProfile名を設定してください。
 ```
 # アカウント1用のプロバイダー
