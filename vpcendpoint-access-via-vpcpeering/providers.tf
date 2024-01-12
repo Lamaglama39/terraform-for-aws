@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = ">= 1.5.5"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.29.0"
+      version = ">= 5.30.0"
     }
   }
 }
@@ -13,12 +13,12 @@ terraform {
 provider "aws" {
   alias   = "account1"
   region  = "ap-northeast-1"
-  profile = "dev"
+  profile = "account1"
 }
 
 # アカウント2用のプロバイダー
 provider "aws" {
   alias   = "account2"
   region  = "ap-northeast-1"
-  profile = "prod"
+  profile = "account2"
 }

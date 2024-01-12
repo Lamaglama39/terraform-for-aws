@@ -20,7 +20,7 @@ resource "aws_instance" "ec2_1" {
   subnet_id                   = aws_subnet.public_subnet_a.id
   vpc_security_group_ids      = ["${aws_security_group.sg_ec2_1.id}"]
   associate_public_ip_address = true
-  user_data = file("./config/cloud-config.cfg")
+  user_data = file("./config/cloud-config-client.cfg")
 
   tags = {
     Name = "${var.account1}-ec2-1"
@@ -38,7 +38,7 @@ resource "aws_instance" "ec2_2" {
   subnet_id                   = aws_subnet.public_subnet_c.id
   vpc_security_group_ids      = ["${aws_security_group.sg_ec2_2.id}"]
   associate_public_ip_address = true
-  user_data = file("./config/cloud-config.cfg")
+  user_data = file("./config/cloud-config-web-server.cfg")
 
   tags = {
     Name = "${var.account2}-ec2-2"
