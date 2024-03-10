@@ -16,6 +16,10 @@ provider "aws" {
   profile = "account1"
 }
 
+data "aws_caller_identity" "account1_id" {
+  provider = "aws.account1"
+}
+
 # アカウント2用のプロバイダー
 provider "aws" {
   alias   = "account2"
