@@ -1,13 +1,11 @@
-# vpcendpoint-access-via-vpcpeering
-VPCピアリング経由で、別のVPCのPrivateLinkを利用する構成です。
-<br>
-マルチアカウント構築の検証などでご利用ください。
-
+# privatelink-access-control
+PrivateLinkを利用する際のアクセス制御を検証するためのTerraformです。  
+VPCエンドポイントサービスを利用したVPCエンドポイントを作成し、  
+クライアント側EC2からサービス提供側EC2へPrivateLink経由でアクセスする構成です。
 
 # 構成図
-## ①AssumeRoleを利用しないパターン
 <p>
-<img height="400px" src="./src/vpcendpoint-access-via-vpcpeering.png">
+<img height="400px" src="./src/privateLink-access-control.png">
 </p>
 
 # 使い方
@@ -52,7 +50,13 @@ $ terraform apply
 
 (4) Outputs:に出力された以下のコマンドを実行して、アクセス元のEC2へ接続します。
 ```
-Connection_source_ec2 = "aws ssm start-session --target ${aws_instance.ec2_1.id} --region ap-northeast-1"
+output "Connection_ec2_client_vpcpeering" {
+  value = "aws ssm start-session --target ${aws_instance.ec2_client_vpcpeering.id} --region ap-northeast-1"
+}
+
+output "Connection_client_vpcendpoint" {
+  value = "aws ssm start-session --target ${aws_instance.ec2_client_vpcendpoint.id} --region ap-northeast-1"
+}
 ```
 
 (5) Outputs:に出力された以下のコマンドを実行して、PrivateLink経由でアクセス先のEC2からレスポンスが返ってくることを確認してください。
