@@ -7,7 +7,7 @@ HTTPSでWebサイトを公開したい！でもドメイン名をとるほどの
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-aws-static-website.drawio.png">
+<img width="75%" src="./src/terraform-aws-static-website.drawio.png">
 </p>
 
 # 使い方

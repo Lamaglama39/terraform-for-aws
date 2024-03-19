@@ -8,7 +8,7 @@ EC2上でAnsibleをセットアップします。
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-ansible.png">
+<img width="75%" src="./src/terraform-ansible.png">
 </p>
 
 # 使い方

@@ -5,7 +5,7 @@
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-aws-linebot.drawio.png">
+<img width="75%" src="./src/terraform-aws-linebot.drawio.png">
 </p>
 
 # 事前準備

@@ -10,7 +10,7 @@ T-Potを利用しており、EC2立ち上げ後はそのまま利用できるの
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-honeypot-for-ec2.png">
+<img width="75%" src="./src/terraform-honeypot-for-ec2.png">
 </p>
 
 # 使い方

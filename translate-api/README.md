@@ -7,7 +7,7 @@
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-translate-serverless.png">
+<img width="75%" src="./src/terraform-translate-serverless.png">
 </p>
 
 # 使い方

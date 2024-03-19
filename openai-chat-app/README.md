@@ -5,7 +5,7 @@ APIさえ取得していればすぐに利用できます。
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-openai-serverless.png">
+<img width="75%" src="./src/terraform-openai-serverless.png">
 </p>
 
 # 使い方

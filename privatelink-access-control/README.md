@@ -5,7 +5,7 @@ VPCエンドポイントサービスを利用したVPCエンドポイントを�
 
 # 構成図
 <p>
-<img height="400px" src="./src/privateLink-access-control.png">
+<img width="75%" src="./src/privateLink-access-control.png">
 </p>
 
 # 使い方

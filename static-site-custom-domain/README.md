@@ -7,7 +7,7 @@ Route53とCloudFrontを利用した、カスタムドメインの静的Webサイ
 
 # 構成図
 <p>
-<img height="400px" src="./src/terraform-custom-domain.png">
+<img width="75%" src="./src/terraform-custom-domain.png">
 </p>
 
 # 使い方

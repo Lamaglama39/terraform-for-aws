@@ -9,7 +9,7 @@
 # 構成図
 
 <p>
-<img height="400px" src="./src/terraform-aws-twitterbot.drawio.png">
+<img width="75%" src="./src/terraform-aws-twitterbot.drawio.png">
 </p>
 
 # 使用例
