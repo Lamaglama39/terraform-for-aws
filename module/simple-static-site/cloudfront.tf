@@ -2,8 +2,8 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
   # オリジン設定
   origin {
-    origin_id   = aws_s3_bucket.bucket.id
-    domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
+    origin_id                = aws_s3_bucket.bucket.id
+    domain_name              = aws_s3_bucket.bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.origin_access_control.id
   }
 

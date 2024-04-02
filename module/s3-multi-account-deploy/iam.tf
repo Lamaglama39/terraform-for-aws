@@ -67,15 +67,15 @@ data "aws_iam_policy_document" "account2-s3-access_1" {
 
 # EC2 IAMポリシー
 resource "aws_iam_policy" "account1-s3-access_1" {
-  provider           = aws.account1
-  policy = data.aws_iam_policy_document.account1-s3-access_1.json
-  name   = "${var.account1}-S3access-iam-policy-1"
+  provider = aws.account1
+  policy   = data.aws_iam_policy_document.account1-s3-access_1.json
+  name     = "${var.account1}-S3access-iam-policy-1"
 }
 
 resource "aws_iam_policy" "account2-s3-access_1" {
-  provider           = aws.account1
-  policy = data.aws_iam_policy_document.account2-s3-access_1.json
-  name   = "${var.account2}-S3access-iam-policy-1"
+  provider = aws.account1
+  policy   = data.aws_iam_policy_document.account2-s3-access_1.json
+  name     = "${var.account2}-S3access-iam-policy-1"
 }
 
 # EC2 IAMポリシーアタッチ
@@ -148,9 +148,9 @@ data "aws_iam_policy_document" "account1-s3-access_2" {
 
 # EC2 IAMポリシー
 resource "aws_iam_policy" "account1-s3-access_2" {
-  provider           = aws.account1
-  policy = data.aws_iam_policy_document.account1-s3-access_2.json
-  name   = "${var.account1}-S3access-iam-policy-2"
+  provider = aws.account1
+  policy   = data.aws_iam_policy_document.account1-s3-access_2.json
+  name     = "${var.account1}-S3access-iam-policy-2"
 }
 
 # EC2 IAMポリシーアタッチ
@@ -195,7 +195,7 @@ data "aws_iam_policy_document" "assume_role_2" {
 
 # AssumeRole IAMロール
 resource "aws_iam_role" "ec2_role_3" {
-  provider = aws.account2
+  provider           = aws.account2
   name               = "${var.account2}-ec2-role-3"
   assume_role_policy = data.aws_iam_policy_document.assume_role_2.json
 }
@@ -236,24 +236,24 @@ data "aws_iam_policy_document" "account2-s3-access_2" {
 
 resource "aws_iam_policy" "account1-s3-access_3" {
   provider = aws.account2
-  policy = data.aws_iam_policy_document.account1-s3-access_3.json
-  name   = "${var.account2}-S3access-iam-policy-3"
+  policy   = data.aws_iam_policy_document.account1-s3-access_3.json
+  name     = "${var.account2}-S3access-iam-policy-3"
 }
 
 resource "aws_iam_policy" "account2-s3-access_2" {
   provider = aws.account2
-  policy = data.aws_iam_policy_document.account2-s3-access_2.json
-  name   = "${var.account2}-S3access-iam-policy-2"
+  policy   = data.aws_iam_policy_document.account2-s3-access_2.json
+  name     = "${var.account2}-S3access-iam-policy-2"
 }
 
 resource "aws_iam_role_policy_attachment" "account1-s3-access_3" {
-  provider = aws.account2
+  provider   = aws.account2
   role       = aws_iam_role.ec2_role_3.name
   policy_arn = aws_iam_policy.account1-s3-access_3.arn
 }
 
 resource "aws_iam_role_policy_attachment" "account2-s3-access_2" {
-  provider = aws.account2
+  provider   = aws.account2
   role       = aws_iam_role.ec2_role_3.name
   policy_arn = aws_iam_policy.account2-s3-access_2.arn
 }

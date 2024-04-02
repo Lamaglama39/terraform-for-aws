@@ -29,7 +29,7 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   layer_name = "openai"
   filename   = "archive/openai.zip"
 
-  compatible_runtimes = ["python3.9"]
+  compatible_runtimes      = ["python3.9"]
   compatible_architectures = ["x86_64"]
 }
 
@@ -58,13 +58,13 @@ resource "aws_lambda_function" "lambda" {
   runtime                        = "python3.9"
   filename                       = data.archive_file.function_source.output_path
   source_code_hash               = data.archive_file.function_source.output_base64sha256
-  layers = ["${aws_lambda_layer_version.lambda_layer.arn}"]
+  layers                         = ["${aws_lambda_layer_version.lambda_layer.arn}"]
 
   timeout = "60"
 
   environment {
     variables = {
-      API_Key = var.API_Key,
+      API_Key      = var.API_Key,
       API_ENDPOINT = var.API_ENDPOINT
     }
   }
@@ -76,7 +76,7 @@ resource "aws_lambda_function" "lambda" {
 resource "aws_lambda_function_url" "lambda_url" {
   function_name      = aws_lambda_function.lambda.function_name
   authorization_type = "NONE"
-  
+
   cors {
     allow_credentials = true
     allow_origins     = ["https://${aws_cloudfront_distribution.cloudfront_distribution.domain_name}"]

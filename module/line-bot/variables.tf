@@ -10,6 +10,6 @@ variable "table_name_day" {
   default = "line_table_day"
 }
 variable "table_name_week" {
-  type = string
+  type    = string
   default = "line_table_week"
 }

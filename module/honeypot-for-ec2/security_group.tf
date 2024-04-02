@@ -4,8 +4,8 @@ data "http" "ipv4_icanhazip" {
 }
 
 locals {
-  current-ip = chomp(data.http.ipv4_icanhazip.body)
-  allowed-cidr  = "${local.current-ip}/32"
+  current-ip   = chomp(data.http.ipv4_icanhazip.body)
+  allowed-cidr = "${local.current-ip}/32"
 }
 
 # honeypot server セキュリティーグループ

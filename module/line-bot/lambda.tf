@@ -19,19 +19,19 @@ resource "aws_lambda_function" "lambda" {
   reserved_concurrent_executions = "-1"
   role                           = aws_iam_role.iam_role.arn
   runtime                        = "python3.8"
-  filename         = data.archive_file.function_source.output_path
-  source_code_hash = data.archive_file.function_source.output_base64sha256
+  filename                       = data.archive_file.function_source.output_path
+  source_code_hash               = data.archive_file.function_source.output_base64sha256
 
   timeout = "3"
 
   environment {
     variables = {
-      api_url = "${var.api_url}"
-      token_event = "${var.token_event}"
-      token_garbage = "${var.token_garbage}"
-      user_id  = "${var.user_id}"
+      api_url         = "${var.api_url}"
+      token_event     = "${var.token_event}"
+      token_garbage   = "${var.token_garbage}"
+      user_id         = "${var.user_id}"
       table_name_day  = "${var.table_name_day}"
-      table_name_week  = "${var.table_name_week}"
+      table_name_week = "${var.table_name_week}"
     }
   }
   tracing_config {

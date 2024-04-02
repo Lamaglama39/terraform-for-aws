@@ -21,7 +21,7 @@ resource "aws_dynamodb_table" "dynamodb_day" {
 }
 
 locals {
-  json_data_day = file("./dynamodb_config/config_day.json")         
+  json_data_day = file("./dynamodb_config/config_day.json")
   config_day    = jsondecode(local.json_data_day)
 }
 
@@ -31,7 +31,7 @@ resource "aws_dynamodb_table_item" "item_day" {
   table_name = aws_dynamodb_table.dynamodb_day.name
   hash_key   = aws_dynamodb_table.dynamodb_day.hash_key
 
-  item = jsonencode(each.value)             
+  item = jsonencode(each.value)
 }
 
 # 曜日用dynamodbテーブル
@@ -57,7 +57,7 @@ resource "aws_dynamodb_table" "dynamodb_week" {
 }
 
 locals {
-  json_data_week = file("./dynamodb_config/config_week.json")         
+  json_data_week = file("./dynamodb_config/config_week.json")
   config_week    = jsondecode(local.json_data_week)
 }
 
@@ -67,5 +67,5 @@ resource "aws_dynamodb_table_item" "item_week" {
   table_name = aws_dynamodb_table.dynamodb_week.name
   hash_key   = aws_dynamodb_table.dynamodb_week.hash_key
 
-  item = jsonencode(each.value)             
+  item = jsonencode(each.value)
 }

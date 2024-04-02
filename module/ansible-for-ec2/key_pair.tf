@@ -44,7 +44,7 @@ resource "local_file" "put_private_key_server" {
   provisioner "local-exec" {
     command = "scp -i ${local.private_key_file} ${local.private_key_file} ec2-user@${aws_instance.server.public_ip}:/home/ec2-user/.ssh"
   }
-  depends_on = [ aws_instance.client_1c ]
+  depends_on = [aws_instance.client_1c]
 }
 
 resource "local_file" "put_public_key_server" {
@@ -53,7 +53,7 @@ resource "local_file" "put_public_key_server" {
   provisioner "local-exec" {
     command = "scp -i ${local.private_key_file} ${local.public_key_file} ec2-user@${aws_instance.server.public_ip}:/home/ec2-user/.ssh"
   }
-  depends_on = [ aws_instance.client_1c ]
+  depends_on = [aws_instance.client_1c]
 }
 
 # ansible 設定ファイル 送信
@@ -63,7 +63,7 @@ resource "local_file" "config_ansible" {
   provisioner "local-exec" {
     command = "scp -r -i ${local.private_key_file} ./conf/ansible ec2-user@${aws_instance.server.public_ip}:/home/ec2-user/"
   }
-  depends_on = [ aws_instance.client_1c ]
+  depends_on = [aws_instance.client_1c]
 }
 
 # ssh 設定ファイル 送信
@@ -73,5 +73,5 @@ resource "local_file" "config_ssh" {
   provisioner "local-exec" {
     command = "scp -r -i ${local.private_key_file} ./conf/.ssh ec2-user@${aws_instance.server.public_ip}:/home/ec2-user/"
   }
-  depends_on = [ aws_instance.client_1c ]
+  depends_on = [aws_instance.client_1c]
 }

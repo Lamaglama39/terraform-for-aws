@@ -18,7 +18,7 @@ resource "aws_instance" "client" {
   vpc_security_group_ids      = ["${aws_security_group.client.id}"]
   key_name                    = aws_key_pair.key_pair.id
   associate_public_ip_address = true
-  user_data = file("./conf/user_data.sh")
+  user_data                   = file("./conf/user_data.sh")
 
   tags = {
     Name = "${var.project}-ec2-client"

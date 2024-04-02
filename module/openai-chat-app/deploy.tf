@@ -4,7 +4,7 @@ resource "null_resource" "build_and_deploy" {
     build_trigger = "${timestamp()}"
   }
 
-  depends_on = [ aws_cloudfront_distribution.cloudfront_distribution ]
+  depends_on = [aws_cloudfront_distribution.cloudfront_distribution]
 
   provisioner "local-exec" {
     command = <<EOF
