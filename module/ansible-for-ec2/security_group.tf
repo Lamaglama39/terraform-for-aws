@@ -10,50 +10,50 @@ locals {
 
 # 管理サーバ セキュリティーグループ
 resource "aws_security_group" "server" {
-  name        = "${var.name}-server-sg"
-  description = "${var.name}-server-sg"
+  name        = "${var.app_name}-server-sg"
+  description = "${var.app_name}-server-sg"
   vpc_id      = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.name}-sg"
+    Name = "${var.app_name}-sg"
   }
+}
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [local.allowed-cidr]
-  }
+resource "aws_vpc_security_group_ingress_rule" "server" {
+  security_group_id = aws_security_group.server.id
+  cidr_ipv4         = local.allowed-cidr
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_vpc_security_group_egress_rule" "server" {
+  security_group_id = aws_security_group.server.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }
 
 # クライアント セキュリティーグループ
 resource "aws_security_group" "client" {
-  name        = "${var.name}-client-sg"
-  description = "${var.name}-client-sg"
+  name        = "${var.app_name}-client-sg"
+  description = "${var.app_name}-client-sg"
   vpc_id      = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.name}-sg"
+    Name = "${var.app_name}-sg"
   }
+}
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${aws_instance.server.private_ip}/32"]
-  }
+resource "aws_vpc_security_group_ingress_rule" "client" {
+  security_group_id = aws_security_group.client.id
+  cidr_ipv4         = aws_subnet.public.cidr_block
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_vpc_security_group_egress_rule" "client" {
+  security_group_id = aws_security_group.client.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }

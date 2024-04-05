@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "role" {
-  name               = "${var.name}-ssm-role"
+  name               = "${var.app_name}-ssm-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -33,6 +33,6 @@ resource "aws_iam_role_policy_attachment" "ec2" {
 }
 
 resource "aws_iam_instance_profile" "systems_manager" {
-  name = "${var.name}-ssm-instanceProfile"
+  name = "${var.app_name}-ssm-instanceProfile"
   role = aws_iam_role.role.name
 }

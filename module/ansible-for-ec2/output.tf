@@ -1,8 +1,14 @@
-# 管理用サーバ 接続コマンド
+# SSHコマンドの出力
 output "ssh_command" {
-  value = "ssh -i ${local.private_key_file} ec2-user@${aws_instance.server.public_ip}"
+  value = {
+    for key, instance in aws_instance.server :
+    key => "ssh -i ${local.private_key_file} ec2-user@${instance.public_ip}"
+  }
 }
 
 output "ssm_command" {
-  value = "aws ssm start-session --target ${aws_instance.server.id} --region ap-northeast-1"
+  value = {
+    for key, instance in aws_instance.server :
+    key => "aws ssm start-session --target ${instance.id} --region ap-northeast-1"
+  }
 }
