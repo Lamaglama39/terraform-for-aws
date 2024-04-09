@@ -1,0 +1,28 @@
+plugin: aws_ec2
+regions:
+  - ap-northeast-1
+
+# フィルタの設定 (起動しているEC2インスタンスのみ)
+filters:
+  instance-state-name: running
+
+# グルーピングの設定 (タグ毎にEC2インスタンスをグループ化)
+keyed_groups:
+  - key: tags.doc
+    prefix: tag_Name_
+    separator: ""
+
+# inventory_hostnameの設定項目の優先順位
+# Nameタグ or パブリックIPアドレス or プライベートIPアドレス
+hostnames:
+  - tag:Name
+  - ip-address
+  - private-ip-address
+
+compose:
+  # inventory_hostnameを変更せずにansible_hostを変更する場合
+  # プライベートIPv4アドレスでホストに接続する場合
+  ansible_host: private_ip_address
+
+  # SSM Session Managerでホストに接続する場合
+  # ansible_host: instance_id
