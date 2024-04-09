@@ -1,9 +1,7 @@
 # terraform-ansible-for-ec2
-EC2上でAnsibleをセットアップします。
-<br>
-クライアント用EC2のインベントリ作成までできるので、プレイブックを作成すればすぐに使える状態になります。
-<br>
-また管理用サーバへのアクセスは、sshかSession Managerで可能です。
+EC2上でAnsibleサーバ、およびクライアントをセットアップします。  
+Ansibleサーバの設定からクライアントのインベントリ作成までできるので、プレイブックを作成すればすぐに使える状態になります。  
+また管理用サーバへ`ssh`か`Session Manager`で接続可能です。
 
 
 # 構成図
@@ -21,8 +19,8 @@ $ terraform apply
 
 (2) Outputs:に出力されたコマンドで管理用サーバに接続します。
 ```
-ssh_command = "ssh -i ./.key_pair/ansible-key.id_rsa ec2-user@XXX.XXX.XXX.XXX"
-ssm_command = "aws ssm start-session --target i-XXXXXXXXXXXXXXXXX --region ap-northeast-1"
+ssh_command = "ssh -i ${local.private_key_file} ec2-user@${instance.public_ip}"
+ssm_command = "aws ssm start-session --target ${instance.id} --region ${local.region}"
 ```
 
 (3) ansible-inventory コマンドでインベントリの状況を確認します。

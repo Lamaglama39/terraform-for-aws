@@ -28,3 +28,10 @@ output "ssh_commands" {
     instance_key => "ssh -i ${local.private_key_file} ec2-user@${instance.public_ip}"
   }
 }
+
+output "ssm_commands" {
+  value = {
+    for instance_key, instance in module.ec2_server :
+    instance_key => "aws ssm start-session --target ${instance.id} --region ${local.region}"
+  }
+}
