@@ -112,7 +112,13 @@ module "lambda_layer" {
   description         = "OpenAI lambda layer"
   compatible_runtimes = ["python3.12"]
 
-  source_path = "./app/python"
+  source_path = [
+    {
+      path           = "${path.module}/app/python"
+      poetry_install = true
+      prefix_in_zip  = "python"
+    }
+  ]
 }
 
 module "lambda" {
