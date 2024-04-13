@@ -1,0 +1,191 @@
+* {
+  margin: 0;
+  font-size: 2vh;
+  font-family: Arial; Helvetica; sans-serif;
+}
+
+/* ページ全体 */
+.page {
+  height: 100% ;
+  width: 100% ;
+}
+
+.loading {
+  text-align: center;
+  font-weight: bold;
+  width: 80%;
+  font-size: 2.5vh;
+  position: absolute; /* 絶対位置を設定 */
+  top: 35vh; /* 上から50%の位置 */
+  left: 50vw; /* 左から50%の位置 */
+  transform: translate(-50%, -50%); /* 要素自体の50%ずらして中央揃え */
+  z-index: 1000; /* 他の要素より前面に表示 */
+}
+
+/* チャットエリア全体 */
+.chat {
+  position: fixed;
+  top: 5vh;
+  left: 0;
+  right: 0;
+  height: 75vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #127369;
+}
+
+/* メッセージ共通設定 */
+.message {
+  width: max-content;
+  max-width: 50%;
+  padding: 2vh;
+  margin: 3vh;
+  border-radius: 1vh;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.5s ease-out;
+  visibility: hidden;
+}
+
+/* メッセージ表示時の設定 */
+.message.show {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+}
+
+
+.icon {
+  position: absolute;
+  top: -10px;
+  width: 5vh;
+  height: 5vh;
+  background-color: black;
+  border-radius: 50%;
+}
+
+/* ユーザーメッセージ */
+.user {
+  align-self: flex-end;
+  background-color: #e6e6e6;
+}
+
+.user .icon {
+  transform: translate(50%, -25%);
+  right: 0;
+}
+
+/* システムメッセージ */
+.system {
+  align-self: flex-start;
+  background-color: #e6e6e6;
+}
+
+.system .icon {
+  transform: translate(-50%, -25%);
+  left: 0;
+}
+
+.top-form {
+  padding: 1vh;
+  height: 5vh;
+  background-color: #127369;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 履歴削除button */
+.delete-btn {
+  height: 4vh;
+  cursor: pointer;
+  border-radius: 1vh;
+}
+
+.api-model-select {
+  text-align: center;
+  height: 4vh;
+  cursor: pointer;
+  border-radius: 1vh;
+}
+
+/* フォーム全体 */
+.bottom-form {
+  position: fixed;  
+  bottom: 0;
+  width: 100%;
+  height: 20vh;
+  background-color: #127369;
+}
+
+/* フォームエリア全体 */
+.form-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90%;
+}
+
+/* フォーム共通設定 */
+.form-area {
+  margin: 1vw 2vw 0 2vw;
+  border-radius: 1vh;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+/* テキストエリア共通設定 */
+.text-area {
+  width: 90%;
+  height: 10vh;
+  border-radius: 1vh;
+}
+
+.system-form {
+  background-color: #8AA6A3;
+}
+.user-form {
+  background-color: #BFBFBF;
+}
+
+.submit-btn {
+  margin: auto;
+}
+
+/* ローディングアイコン用 */
+.loading-icon {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0); /* 背景色の透明度を0に設定 */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #000;
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
