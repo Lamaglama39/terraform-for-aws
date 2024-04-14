@@ -71,6 +71,7 @@ locals {
   environment_variables = {
     API_Key      = var.OPENAI_API_Key,
     API_ENDPOINT = var.OPENAI_API_ENDPOINT
+    TABLE_NAME = "${local.app_name}-table"
   }
 
   # dynamodb table

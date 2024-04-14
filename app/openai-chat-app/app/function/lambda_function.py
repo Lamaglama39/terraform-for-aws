@@ -6,15 +6,16 @@ from botocore.exceptions import ClientError
 import time
 
 openai.api_key = os.environ['API_Key']
-API_ENDPOINT = os.environ['API_ENDPOINT']
+table_name = os.environ['TABLE_NAME']
+
 
 # Lambda関数
 def lambda_handler(event, context):
-    #クエリパラメータ
+    # クエリパラメータ
     load = event['queryStringParameters'].get('load', "False")
     delete = event['queryStringParameters'].get('delete', "False")
     sourceIp = event['requestContext']['http']['sourceIp']
-    
+
     # 履歴削除処理
     if delete == "True":
         # DynamoDBアイテム削除処理
@@ -23,7 +24,7 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': "delete complete",
             'isBase64Encoded': False
-            }
+        }
 
     # DynamoDBから過去の会話を取得
     conversation = dynamodb_search(sourceIp)
@@ -34,11 +35,12 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': conversation,
             'isBase64Encoded': False
-            }
+        }
 
-
-    api_model = event['queryStringParameters'].get('api_model', 'gpt-3.5-turbo')
-    system_text = event['queryStringParameters'].get('system_text', 'Chat with OpenAI started.')
+    api_model = event['queryStringParameters'].get(
+        'api_model', 'gpt-3.5-turbo')
+    system_text = event['queryStringParameters'].get(
+        'system_text', 'Chat with OpenAI started.')
     user_text = event['queryStringParameters']['user_text']
     # system textがあれば追加
     if len(system_text) != 0:
@@ -46,9 +48,9 @@ def lambda_handler(event, context):
 
     # user textを追加
     conversation.append({"role": "user", "content": user_text})
-    
+
     # 文字制限超過分を古い順でから削除
-    conversation =  truncate_conversation(conversation)
+    conversation = truncate_conversation(conversation)
 
     # OpenAI APIにリクエスト
     response = openai.ChatCompletion.create(
@@ -57,24 +59,25 @@ def lambda_handler(event, context):
     )
 
     # APIからの応答を会話に追加
-    conversation.append({"role": "assistant", "content": response["choices"][0]["message"]["content"]})
+    conversation.append(
+        {"role": "assistant", "content": response["choices"][0]["message"]["content"]})
 
     # DynamoDBの会話を更新
     dynamodb_add(sourceIp, conversation)
-    
+
     # レスポンス
     return {
         'statusCode': 200,
         'body': response["choices"][0]["message"]["content"],
         'isBase64Encoded': False
     }
-    
+
 
 # DynamoDB削除 関数
 def dynamodb_delete(sourceIp):
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('openai-table')
-    
+    table = dynamodb.Table(table_name)
+
     try:
         response = table.delete_item(
             Key={
@@ -89,8 +92,8 @@ def dynamodb_delete(sourceIp):
 # DynamoDB検索 関数
 def dynamodb_search(sourceIp):
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('openai-table')
-    
+    table = dynamodb.Table(table_name)
+
     try:
         response = table.get_item(
             Key={
@@ -100,7 +103,7 @@ def dynamodb_search(sourceIp):
     except ClientError as e:
         print(e.response['Error']['Message'])
         return []
-    
+
     if 'Item' in response:
         return json.loads(response['Item']['conversation'])
     else:
@@ -122,7 +125,7 @@ def dynamodb_add(sourceIp, conversation,):
     timeout = int(time.time() + 1800)
 
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('openai-table')
+    table = dynamodb.Table(table_name)
     table.put_item(
         Item={
             'sourceIp': sourceIp,
