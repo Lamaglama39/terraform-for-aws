@@ -1,7 +1,7 @@
 locals {
   region      = "ap-northeast-1"
   default_tag = "terraform"
-  app_name    = "openai-bot"
+  app_name    = "openai-chat-app"
 
   # cloudfront
   enabled             = true
@@ -69,8 +69,7 @@ locals {
   }
 
   environment_variables = {
-    API_Key      = var.OPENAI_API_Key,
-    API_ENDPOINT = var.OPENAI_API_ENDPOINT
+    API_Key      = var.OPENAI_API_Key
     TABLE_NAME = "${local.app_name}-table"
   }
 
