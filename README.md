@@ -8,10 +8,26 @@ Terraformを用いたAWSアーキテクチャ集です。
 
 ## 動作環境
 
-事前にAWS CLIのインストールとクレデンシャル設定、およびTerraformのインストールが事前に必要です。
+### ローカル端末で実行する場合
+AWS CLIのインストールとクレデンシャル設定、およびTerraformのインストールして実行してください。
 
 - AWS CLI (version:^1.2.0)
 - Terraform (version:^1.3.0)
+
+### Dockerを利用して実行する場合
+AWS CLIのクレデンシャルを設定し、以下でDockerを立ち上げログインしてTerraformを実行してください。
+
+* Docker Container Create
+```
+cd docker/ && \
+docker-compose up -d && \
+docker-compose exec terraform ash
+```
+
+* Docker Container Delete
+```
+docker-compose down
+```
 
 ## 使い方
 
