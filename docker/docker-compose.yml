@@ -6,11 +6,11 @@ services:
     image: hashicorp/terraform:latest
     volumes:
       - type: bind
-        source: "../"
-        target: "/src"
+        source: "../app"
+        target: "/app"
       - type: bind
         source: "${HOME}/.aws"
         target: "/root/.aws"
-    working_dir: /src
+    working_dir: /app
     entrypoint: ["/bin/ash"]
     tty: true

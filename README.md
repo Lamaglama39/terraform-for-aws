@@ -19,7 +19,7 @@ AWS CLIのクレデンシャルを設定し、以下でDockerを立ち上げロ�
 
 * Docker Container Create
 ```
-cd docker/ && \
+cd ./docker && \
 docker-compose up -d && \
 docker-compose exec terraform ash
 ```
