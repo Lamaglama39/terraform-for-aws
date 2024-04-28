@@ -10,6 +10,12 @@ module "code-series" {
   public_subnet_cidr_block = local.public_subnet_cidr_block
   vpc_cidr_block           = local.vpc_cidr_block
   subnet_azs               = local.subnet_azs
-  server_instances_map     = local.server_instances_map
   security_groups          = local.security_groups_map
+}
+
+module "ec2" {
+  source = "../modules/ec2"
+
+  app_name              = local.app_name
+  server_instances_map     = local.server_instances_map
 }

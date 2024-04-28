@@ -280,7 +280,3 @@ variable "security_groups" {
   type = any
 }
 
-variable "server_instances_map" {
-  type = any
-}
-
