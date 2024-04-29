@@ -6,3 +6,7 @@ variable "app_name" {
 variable "server_instances_map" {
   type = any
 }
+
+variable "security_groups" {
+  type = any
+}

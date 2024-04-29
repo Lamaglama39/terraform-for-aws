@@ -262,21 +262,3 @@ variable "pipeline_type" {
   type        = string
   default = "V2"
 }
-
-# ec2
-variable "vpc_cidr_block" {
-  type = string
-}
-
-variable "subnet_azs" {
-  type = list(string)
-}
-
-variable "public_subnet_cidr_block" {
-  type = list(string)
-}
-
-variable "security_groups" {
-  type = any
-}
-
