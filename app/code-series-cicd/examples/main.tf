@@ -1,19 +1,19 @@
 module "code-series" {
   source = "../modules/code-series"
 
-  app_name              = local.app_name
-  build_artifact_bucket = local.build_artifact_bucket
-  pipeline_bucket       = local.pipeline_bucket
-  default_branch        = local.default_branch
-  ec2_tag_filter        = local.ec2_tag_filter
+  app_name        = local.app_name
+  build_bucket    = local.build_bucket
+  pipeline_bucket = local.pipeline_bucket
+  default_branch  = local.default_branch
+  ec2_tag_filter  = local.ec2_tag_filter
 }
 
 module "ec2" {
   source = "../modules/ec2"
 
-  app_name              = local.app_name
-  server_instances_map     = local.server_instances_map
-  security_groups          = local.security_groups_map
+  app_name             = local.app_name
+  server_instances_map = local.server_instances_map
+  security_groups      = local.security_groups_map
 }
 
 module "vpc" {
@@ -22,4 +22,16 @@ module "vpc" {
   public_subnet_cidr_block = local.public_subnet_cidr_block
   vpc_cidr_block           = local.vpc_cidr_block
   subnet_azs               = local.subnet_azs
+}
+
+module "s3_build_bucket" {
+  source = "../modules/s3"
+
+  bucket_name = local.build_bucket
+}
+
+module "s3_pipeline_bucket" {
+  source = "../modules/s3"
+
+  bucket_name = local.pipeline_bucket
 }

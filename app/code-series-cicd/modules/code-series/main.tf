@@ -25,7 +25,7 @@ resource "aws_codebuild_project" "this" {
     artifact_identifier    = var.artifacts.artifact_identifier
     bucket_owner_access    = var.artifacts.bucket_owner_access
     encryption_disabled    = var.artifacts.encryption_disabled
-    location               = var.build_artifact_bucket
+    location               = var.build_bucket
     name                   = "${var.app_name}-codebuild-project"
     namespace_type         = var.artifacts.namespace_type
     override_artifact_name = var.artifacts.override_artifact_name
@@ -138,8 +138,8 @@ data "aws_iam_policy_document" "build" {
       "s3:GetBucketLocation",
     ]
     resources = [
-      "arn:aws:s3:::${var.build_artifact_bucket}",
-      "arn:aws:s3:::${var.build_artifact_bucket}/*",
+      "arn:aws:s3:::${var.build_bucket}",
+      "arn:aws:s3:::${var.build_bucket}/*",
     ]
   }
 
@@ -172,11 +172,6 @@ resource "aws_iam_role_policy_attachment" "build" {
 resource "aws_iam_role_policy_attachment" "DeployerAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployDeployerAccess"
   role       = aws_iam_role.build.name
-}
-
-resource "aws_s3_bucket" "build" {
-  bucket              = var.build_artifact_bucket
-  force_destroy = true
 }
 
 resource "aws_codedeploy_app" "this" {
@@ -503,13 +498,6 @@ resource "aws_iam_role_policy_attachment" "pipeline" {
   role       = aws_iam_role.pipeline.name
   policy_arn = aws_iam_policy.pipeline.arn
 }
-
-resource "aws_s3_bucket" "pipeline" {
-  bucket              = var.pipeline_bucket
-  force_destroy = true
-
-}
-
 
 # event bridge
 resource "aws_cloudwatch_event_rule" "this" {

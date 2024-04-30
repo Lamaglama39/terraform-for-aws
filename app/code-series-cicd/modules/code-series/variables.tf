@@ -188,7 +188,7 @@ variable "codebuild_source" {
   }
 }
 
-variable "build_artifact_bucket" {
+variable "build_bucket" {
   description = ""
   type        = string
 }

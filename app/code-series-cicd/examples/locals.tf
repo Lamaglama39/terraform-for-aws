@@ -13,10 +13,11 @@ data "http" "ipv4_icanhazip" {
 }
 
 locals {
-  app_name              = "code-series-cicd"
-  build_artifact_bucket = "${local.app_name}-build-artifact"
-  pipeline_bucket       = "${local.app_name}-pipeline"
-  default_branch        = "main"
+  app_name        = "code-series-cicd"
+  build_bucket    = "${local.app_name}-build-artifact"
+  pipeline_bucket = "${local.app_name}-pipeline"
+
+  default_branch = "main"
   ec2_tag_filter = {
     key   = "app"
     type  = "KEY_AND_VALUE"
