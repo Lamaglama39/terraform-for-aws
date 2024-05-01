@@ -7,7 +7,7 @@ module "ec2" {
 
   iam_instance_profile   = module.iam_assumable_role.iam_instance_profile_name
   vpc_security_group_ids = [module.vote_service_sg["public"].security_group_id]
-  subnet_id              = module.vpc.public_subnets[tonumber(each.key)]
+  subnet_id              = var.subnet_id
 
   ami                         = each.value.ami
   associate_public_ip_address = each.value.associate_public_ip_address
@@ -20,7 +20,7 @@ module "vote_service_sg" {
 
   name        = "${var.app_name}-${each.value.name}-sg"
   description = each.value.description
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress_cidr_blocks = each.value.ingress_cidr_blocks
   ingress_with_cidr_blocks = [

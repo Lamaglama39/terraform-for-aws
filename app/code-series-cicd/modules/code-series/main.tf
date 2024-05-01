@@ -229,7 +229,7 @@ resource "aws_codepipeline" "this" {
   execution_mode = var.execution_mode
 
   artifact_store {
-    location = aws_s3_bucket.pipeline.id
+    location = var.pipeline_bucket
     type     = "S3"
   }
 

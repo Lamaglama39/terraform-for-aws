@@ -2,6 +2,12 @@ output "code_commit_git_clone" {
   value = module.code-series.code_commit_git_clone
 }
 
-output "web_site_ip" {
-  value = module.ec2.web_site_ip
+output "public_ips" {
+  description = "All public IPs of EC2 instances"
+  value       = flatten([
+    for subnet_key in keys(module.ec2) : [
+      for ec2_key in keys(module.ec2[subnet_key]["ec2"]) :
+        format("curl http://%s", module.ec2[subnet_key]["ec2"][ec2_key]["public_ip"]) 
+    ]
+  ])
 }

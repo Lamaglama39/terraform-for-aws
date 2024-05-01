@@ -8,22 +8,6 @@ module "code-series" {
   ec2_tag_filter  = local.ec2_tag_filter
 }
 
-module "ec2" {
-  source = "../modules/ec2"
-
-  app_name             = local.app_name
-  server_instances_map = local.server_instances_map
-  security_groups      = local.security_groups_map
-}
-
-module "vpc" {
-  source = "../modules/vpc"
-
-  public_subnet_cidr_block = local.public_subnet_cidr_block
-  vpc_cidr_block           = local.vpc_cidr_block
-  subnet_azs               = local.subnet_azs
-}
-
 module "s3_build_bucket" {
   source = "../modules/s3"
 
@@ -34,4 +18,25 @@ module "s3_pipeline_bucket" {
   source = "../modules/s3"
 
   bucket_name = local.pipeline_bucket
+}
+
+module "vpc" {
+  source = "../modules/network"
+
+  app_name                 = local.app_name
+  public_subnet_cidr_block = local.public_subnet_cidr_block
+  vpc_cidr_block           = local.vpc_cidr_block
+  subnet_azs               = local.subnet_azs
+}
+
+module "ec2" {
+  source = "../modules/ec2"
+
+  for_each =  toset(module.vpc.vpc.public_subnets)
+  app_name  = local.app_name
+  vpc_id    = module.vpc.vpc.vpc_id
+  subnet_id = each.value
+
+  server_instances_map = local.server_instances_map
+  security_groups      = local.security_groups_map
 }
