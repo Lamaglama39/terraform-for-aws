@@ -1,5 +1,5 @@
 module "code-series" {
-  source = "../modules/code-series"
+  source = "../../modules/code-series"
 
   app_name        = local.app_name
   build_bucket    = local.build_bucket
@@ -9,19 +9,19 @@ module "code-series" {
 }
 
 module "s3_build_bucket" {
-  source = "../modules/s3"
+  source = "../../modules/s3"
 
   bucket_name = local.build_bucket
 }
 
 module "s3_pipeline_bucket" {
-  source = "../modules/s3"
+  source = "../../modules/s3"
 
   bucket_name = local.pipeline_bucket
 }
 
 module "vpc" {
-  source = "../modules/network"
+  source = "../../modules/network"
 
   app_name                 = local.app_name
   public_subnet_cidr_block = local.public_subnet_cidr_block
@@ -30,7 +30,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source = "../modules/ec2"
+  source = "../../modules/ec2"
 
   for_each =  toset(module.vpc.vpc.public_subnets)
   app_name  = local.app_name
