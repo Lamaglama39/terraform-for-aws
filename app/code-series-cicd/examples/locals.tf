@@ -63,7 +63,7 @@ locals {
       instance_type               = "t2.micro"
       ami                         = data.aws_ami.amazonlinux_2023.id
       associate_public_ip_address = true
-      user_data                   = file("${path.root}/userdata.sh")
+      user_data                   = file("${path.root}/conf/userdata.sh")
     }
   ]
 
