@@ -1,11 +1,29 @@
-module "code-series" {
-  source = "../../modules/code-series"
+module "code_commit" {
+  source = "../../modules/code-series/commit"
+
+  app_name        = local.app_name
+  default_branch  = local.default_branch
+}
+
+module "code_build" {
+  source = "../../modules/code-series/build"
 
   app_name        = local.app_name
   build_bucket    = local.build_bucket
-  pipeline_bucket = local.pipeline_bucket
+}
+
+module "code_deploy" {
+  source = "../../modules/code-series/deploy"
+
+  app_name        = local.app_name
+}
+
+module "code_pipeline" {
+  source = "../../modules/code-series/pipeline"
+
+  app_name        = local.app_name
   default_branch  = local.default_branch
-  ec2_tag_filter  = local.ec2_tag_filter
+  pipeline_bucket = local.pipeline_bucket
 }
 
 module "s3_build_bucket" {

@@ -1,5 +1,5 @@
 output "code_commit_git_clone" {
-  value = module.code-series.code_commit_git_clone
+  value = module.code_commit.code_commit_git_clone
 }
 
 output "public_ips" {
