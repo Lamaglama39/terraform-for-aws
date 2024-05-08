@@ -1,5 +1,9 @@
 output "CURL_TO_NLB" {
-  value = "curl ${module.elb.nlb.dns_name}"
+  value = "curl http://${module.elb.nlb.dns_name}"
+}
+
+output "LOGIN_ADMIN_URL" {
+  value = "http://${module.elb.nlb.dns_name}/wp-login.php"
 }
 
 output "CONNECT_EC2_SSM" {

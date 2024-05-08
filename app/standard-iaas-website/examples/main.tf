@@ -32,7 +32,7 @@ module "sg_rule" {
   app_name   = local.app_name
   vpc_id     = module.vpc.vpc.vpc_id
   sg_rules   = each.value
-  depends_on = [module.sg]
+  depends_on = [module.rds]
 }
 
 module "elb" {
@@ -91,7 +91,7 @@ module "rds" {
   db_name                     = local.db_name
   username                    = local.username
   manage_master_user_password = false
-  password                    = var.password
+  password                    = var.rds_password
   port                        = local.port
 
   vpc_security_group_ids  = [module.sg.rds.sg.id]

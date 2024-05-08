@@ -3,8 +3,21 @@ data "aws_ami" "amazonlinux_2023" {
   owners      = ["amazon"]
   filter {
     name = "name"
-
     values = ["al2023-ami-*-kernel-6.1-x86_64"]
+  }
+}
+
+data "template_file" "user_data" {
+  template = file("./conf/userdata.sh")
+  vars = {
+    db_name    = "${local.db_name}"
+    db_user    = "${local.username}"
+    db_pass    = "${var.rds_password}"
+    db_host    = "${module.rds.rds.db_instance_address}"
+    site_title = "${local.site_title}"
+    admin_user = "${local.wp_admin_user}"
+    admin_pass = "${var.wp_password}"
+    email      = "${var.email}"
   }
 }
 
@@ -13,9 +26,13 @@ data "http" "ipv4_icanhazip" {
 }
 
 locals {
-  app_name     = "aws-assignments"
+  app_name     = "standard-website"
   current-ip   = chomp(data.http.ipv4_icanhazip.body)
   allowed-cidr = "${local.current-ip}/32"
+
+  # wordpress
+  site_title    = "test-site"
+  wp_admin_user = "wp_admin_user"
 
   # network
   vpc_cidr_block            = "10.0.0.0/16"
@@ -100,6 +117,13 @@ locals {
           cidr_blocks = [local.allowed-cidr]
         },
         {
+          type        = "ingress"
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = [local.allowed-cidr]
+        },
+        {
           type                     = "ingress"
           from_port                = 80
           to_port                  = 80
@@ -139,7 +163,7 @@ locals {
       instance_type               = "t2.micro"
       ami                         = data.aws_ami.amazonlinux_2023.id
       associate_public_ip_address = true
-      user_data                   = file("${path.root}/conf/userdata.sh")
+      user_data                   = "${data.template_file.user_data.rendered}"
     }
   }
 
