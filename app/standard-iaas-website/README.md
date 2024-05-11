@@ -5,7 +5,7 @@ WordPressの初期設定をユーザーデータで行うので、構築が完�
 
 # 構成図
 <p>
-<img width="75%" src="./src/aws-architecture.drawio.png">
+<img width="75%" src="./src/standard-iaas-website.png">
 </p>
 
 
