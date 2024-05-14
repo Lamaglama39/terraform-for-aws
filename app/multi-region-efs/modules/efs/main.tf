@@ -1,35 +1,55 @@
-data "aws_caller_identity" "self" { }
-
-module "efs" {
-  source = "terraform-aws-modules/efs/aws"
-
-  # File system
-  name           = "${var.app_name}-${var.primary_region}-efs"
+resource "aws_efs_file_system" "main" {
+  creation_token = "${var.app_name}-${var.region}-efs"
   encrypted      = var.encrypted
-  kms_key_arn    = var.kms_key_arn
-  lifecycle_policy = var.lifecycle_policy
+  kms_key_id     = var.kms_key_arn
 
-  # File system policy
-  attach_policy                      = true
-  bypass_policy_lockout_safety_check = false
+  protection {
+    replication_overwrite = "DISABLED"
+  }
+  lifecycle_policy {
+    transition_to_ia = var.transition_to_ia
+  }
 
-  # Mount targets / security group
-  mount_targets = var.mount_targets
-  security_group_vpc_id      = var.security_group_vpc_id
-  # security_group_description = "Example EFS security group"
-  security_group_rules = {
-    vpc = {
-      description = "NFS ingress from VPC private subnets"
-      cidr_blocks = var.sg_cidr_blocks
+  tags = {
+    Name = "${var.app_name}-${var.region}-efs"
+  }
+}
+
+data "aws_caller_identity" "self" {}
+data "aws_iam_policy_document" "policy" {
+  statement {
+    sid    = "ExampleStatement01"
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.self.account_id
+      }:root"]
+    }
+
+    actions = [
+      "elasticfilesystem:ClientMount",
+      "elasticfilesystem:ClientRootAccess",
+      "elasticfilesystem:ClientWrite",
+    ]
+
+    resources = [aws_efs_file_system.main.arn]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["true"]
     }
   }
+}
 
-  # Backup policy
-  enable_backup_policy = true
+resource "aws_efs_file_system_policy" "main" {
+  file_system_id = aws_efs_file_system.main.id
+  policy         = data.aws_iam_policy_document.policy.json
+}
 
-  # Replication configuration
-  create_replication_configuration = true
-  replication_configuration_destination = {
-    region = var.secondary_region
-  }
+resource "aws_efs_mount_target" "main" {
+  file_system_id  = aws_efs_file_system.main.id
+  subnet_id       = var.subnet_id
+  security_groups = var.security_groups
 }
