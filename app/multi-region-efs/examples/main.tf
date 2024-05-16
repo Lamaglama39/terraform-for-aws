@@ -112,16 +112,41 @@ module "ec2_replica" {
   key_name               = module.key_pair_replica.key_pair.key_pair_name
 
   server_instances_map = local.server_instances_replica
-  depends_on           = [module.efs]
+  depends_on           = [module.efs_secondary]
 }
 
 module "efs" {
   source = "../modules/efs"
 
-  app_name              = local.app_name
-  primary_region        = local.primary_region
-  secondary_region      = local.secondary_region
-  mount_targets         = local.mount_targets
-  security_group_vpc_id = module.vpc.vpc.vpc_id
-  sg_cidr_blocks        = local.vpc_region1.public_subnet_cidr_block
+  app_name        = local.app_name
+  region          = local.primary_region
+  subnet_id       = module.vpc.vpc.private_subnets[0]
+  security_groups = [module.sg.efs.sg.id]
 }
+
+module "efs_secondary" {
+  source = "../modules/efs"
+
+  providers       = { aws = aws.replica }
+  app_name        = local.app_name
+  region          = local.secondary_region
+  subnet_id       = module.vpc_replica.vpc.private_subnets[0]
+  security_groups = [module.sg_replica.efs.sg.id]
+}
+
+module "efs_replication" {
+  source = "../modules/efs_replication"
+
+  source_file_system_id = module.efs.efs.id
+  replication_file_system_id = module.efs_secondary.efs.id
+  replication_region = local.secondary_region
+}
+
+# module "efs_replication_secondary" {
+#   source = "../modules/efs_replication"
+
+#   providers       = { aws = aws.replica }
+#   source_file_system_id = module.efs_secondary.efs.id
+#   replication_file_system_id = module.efs.efs.id
+#   replication_region = local.primary_region
+# }

@@ -1,3 +1,0 @@
-# variable "password" {
-#   type    = string
-# }

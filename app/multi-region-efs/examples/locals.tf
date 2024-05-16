@@ -26,14 +26,14 @@ data "http" "ipv4_icanhazip" {
 data "template_file" "user_data" {
   template = file("./conf/userdata.sh")
   vars = {
-    file_system_id = module.efs.efs.mount_targets.ap-northeast-1a.file_system_id
+    file_system_id = module.efs.efs.id
   }
 }
 
 data "template_file" "user_data_replica" {
-  template = file("./conf/userdata_replica.sh")
+  template = file("./conf/userdata.sh")
   vars = {
-    file_system_id_replica = module.efs.efs.replication_configuration_destination_file_system_id
+    file_system_id = module.efs_secondary.efs.id
   }
 }
 
@@ -187,9 +187,4 @@ locals {
   # efs
   primary_region   = "ap-northeast-1"
   secondary_region = "ap-northeast-3"
-  mount_targets = {
-    "ap-northeast-1a" = {
-      subnet_id = module.vpc.vpc.private_subnets[0]
-    }
-  }
 }
